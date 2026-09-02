@@ -8,7 +8,7 @@ async function main() {
 	try {
 		server = app.listen(config.port, () => {
 			console.log(
-				`🚀 Server running in ${config.env} mode on http://localhost:${config.port}`,
+				`🚀 Server running in ${config.node_env} mode on http://localhost:${config.port}`,
 			);
 		});
 	} catch (error) {

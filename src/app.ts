@@ -2,11 +2,12 @@ import express, {
 	type Application,
 	type Request,
 	type Response,
-	type NextFunction,
 } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import config from "./app/config/index.js";
+import { prisma } from "./app/lib/prisma.js";
+import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
 
 const app: Application = express();
 
@@ -59,27 +60,8 @@ app.use((req: Request, res: Response) => {
 	});
 });
 
-interface AppError extends Error {
-	statusCode?: number;
-	errors?: Array<{ path?: string; message: string }>;
-}
-
 // Global Error Handler
-app.use((err: AppError, req: Request, res: Response, _next: NextFunction) => {
-	const statusCode = err.statusCode || 500;
-	const message = err.message || "Internal Server Error";
-
-	res.status(statusCode).json({
-		success: false,
-		message,
-		errors: err.errors || [
-			{
-				path: req.originalUrl,
-				message: err.message || "An unexpected error occurred",
-			},
-		],
-		stack: config.env === "development" ? err.stack : undefined,
-	});
-});
+app.use(globalErrorHandler);
 
 export default app;
+export { prisma };
