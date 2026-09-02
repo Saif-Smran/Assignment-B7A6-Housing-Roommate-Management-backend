@@ -1,11 +1,16 @@
 import type { Server } from "node:http";
 import app from "./app.js";
 import config from "./app/config/index.js";
+import { prisma } from "./app/lib/prisma.js";
+import { seedDatabase } from "./app/utils/seed.js";
 
 let server: Server;
 
 async function main() {
 	try {
+		await prisma.$connect();
+		console.log("🗄️  Database connected successfully!");
+		await seedDatabase();
 		server = app.listen(config.port, () => {
 			console.log(
 				`🚀 Server running in ${config.node_env} mode on http://localhost:${config.port}`,

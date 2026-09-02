@@ -35,15 +35,30 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // Health check endpoint
-app.get("/health", (_req: Request, res: Response) => {
-	res.status(200).json({
-		success: true,
-		message: "Server is healthy",
-		data: {
-			uptime: process.uptime(),
-			timestamp: new Date().toISOString(),
-		},
-	});
+app.get("/health", async (_req: Request, res: Response) => {
+	try {
+		await prisma.$queryRaw`SELECT 1`;
+		res.status(200).json({
+			success: true,
+			message: "Server and database are healthy",
+			data: {
+				uptime: process.uptime(),
+				timestamp: new Date().toISOString(),
+				database: "connected",
+			},
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Server is running but database connection failed",
+			data: {
+				uptime: process.uptime(),
+				timestamp: new Date().toISOString(),
+				database: "disconnected",
+				error: error instanceof Error ? error.message : "Database Error",
+			},
+		});
+	}
 });
 
 // 404 Not Found Handler
