@@ -1,0 +1,24 @@
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phone        String?
+  role         Role      @default(TENANT)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  // Relations
+  properties      Property[]           @relation("Owner")
+  applications    Application[]
+  payments        Payment[]
+  maintenance     MaintenanceRequest[]
+  auditLogs       AuditLog[]           @relation("Actor")
+  notifications   Notification[]       @relation("Receiver")
+  viewingRequests ViewingRequest[]
+  utilitySplits   UtilitySplit[]
+
+  @@index([email])
+  @@index([role])
+}

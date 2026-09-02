@@ -1,0 +1,24 @@
+model Room {
+  id              String    @id @default(cuid())
+  propertyId      String
+  property        Property  @relation(fields: [propertyId], references: [id])
+  roomNumber      String?
+  roomType        String // e.g., Single, Double, Shared
+  capacity        Int // max number of tenants
+  rentAmount      Float // monthly rent
+  securityDeposit Float?
+  availableFrom   DateTime?
+  availableTo     DateTime?
+  isAvailable     Boolean   @default(true)
+  description     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  applications Application[]
+  maintenance  MaintenanceRequest[]
+
+  @@index([propertyId])
+  @@index([isAvailable])
+  @@index([rentAmount])
+}

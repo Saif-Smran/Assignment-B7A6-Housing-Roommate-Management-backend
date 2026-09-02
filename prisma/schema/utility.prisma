@@ -1,0 +1,28 @@
+model UtilityBill {
+  id          String     @id @default(cuid())
+  propertyId  String
+  property    Property   @relation(fields: [propertyId], references: [id])
+  month       DateTime // billing month
+  totalAmount Float
+  status      BillStatus @default(UNPAID)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  splits UtilitySplit[]
+
+  @@index([propertyId])
+}
+
+model UtilitySplit {
+  id       String      @id @default(cuid())
+  billId   String
+  bill     UtilityBill @relation(fields: [billId], references: [id])
+  tenantId String
+  tenant   User        @relation(fields: [tenantId], references: [id])
+  amount   Float
+  paid     Boolean     @default(false)
+  paidAt   DateTime?
+
+  @@index([billId])
+  @@index([tenantId])
+}

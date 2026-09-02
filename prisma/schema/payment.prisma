@@ -1,0 +1,21 @@
+model Payment {
+  id            String        @id @default(cuid())
+  applicationId String?
+  application   Application?  @relation(fields: [applicationId], references: [id])
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  amount        Float
+  currency      String        @default("BDT")
+  paymentMethod String // bKash, Stripe, SSLCommerz
+  transactionId String? // from gateway
+  status        PaymentStatus @default(PENDING)
+  paymentType   PaymentType // RENT, DEPOSIT, UTILITY
+  description   String?
+  metadata      Json? // gateway-specific data
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([applicationId])
+  @@index([userId])
+  @@index([status])
+}

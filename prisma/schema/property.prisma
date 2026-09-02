@@ -1,0 +1,36 @@
+model Property {
+  id           String    @id @default(cuid())
+  ownerId      String
+  owner        User      @relation("Owner", fields: [ownerId], references: [id])
+  title        String
+  description  String?
+  address      String
+  city         String
+  state        String?
+  country      String
+  zipCode      String?
+  propertyType String // e.g., Apartment, House, Condo
+  amenities    String[] // e.g., ["WiFi", "Parking", "Gym"]
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  rooms        Room[]
+  images       PropertyImage[]
+  viewings     ViewingRequest[]
+  utilityBills UtilityBill[]
+
+  @@index([ownerId])
+  @@index([city])
+  @@index([isActive])
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String // Cloudinary URL
+  isPrimary  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}

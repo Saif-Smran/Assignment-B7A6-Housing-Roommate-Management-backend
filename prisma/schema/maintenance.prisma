@@ -1,0 +1,19 @@
+model MaintenanceRequest {
+  id          String            @id @default(cuid())
+  roomId      String
+  room        Room              @relation(fields: [roomId], references: [id])
+  tenantId    String
+  tenant      User              @relation(fields: [tenantId], references: [id])
+  title       String
+  description String
+  status      MaintenanceStatus @default(SUBMITTED)
+  priority    Priority          @default(MEDIUM)
+  assignedTo  String? // staff/owner id
+  resolvedAt  DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([roomId])
+  @@index([tenantId])
+  @@index([status])
+}

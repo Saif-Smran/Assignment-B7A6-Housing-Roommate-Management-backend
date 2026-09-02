@@ -1,0 +1,16 @@
+model ViewingRequest {
+  id          String        @id @default(cuid())
+  propertyId  String
+  property    Property      @relation(fields: [propertyId], references: [id])
+  tenantId    String
+  tenant      User          @relation(fields: [tenantId], references: [id])
+  scheduledAt DateTime
+  status      ViewingStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([propertyId])
+  @@index([tenantId])
+  @@index([scheduledAt])
+}

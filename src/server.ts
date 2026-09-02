@@ -1,6 +1,6 @@
 import type { Server } from "node:http";
 import app from "./app.js";
-import config from "./config/index.js";
+import config from "./app/config/index.js";
 
 let server: Server;
 

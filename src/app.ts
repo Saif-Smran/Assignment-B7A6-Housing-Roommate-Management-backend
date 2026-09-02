@@ -6,7 +6,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import config from "./config/index.js";
+import config from "./app/config/index.js";
 
 const app: Application = express();
 

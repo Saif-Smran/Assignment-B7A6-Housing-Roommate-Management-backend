@@ -1,0 +1,14 @@
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  actor      User     @relation("Actor", fields: [actorId], references: [id])
+  action     String // e.g., "UPDATE_APPLICATION_STATUS", "CREATE_PROPERTY"
+  targetType String // e.g., "Application", "Property"
+  targetId   String
+  changes    Json? // before/after values
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([actorId])
+}
