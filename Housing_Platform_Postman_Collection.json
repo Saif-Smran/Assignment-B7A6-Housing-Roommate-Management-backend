@@ -1,0 +1,811 @@
+{
+	"info": {
+		"_postman_id": "b7a6-housing-roommate-platform-api",
+		"name": "Housing & Roommate Management Platform API",
+		"description": "Postman collection for Housing & Roommate Management Platform API. Includes Authentication, Profile, Properties, Rooms, Applications, Maintenance, Viewing Requests, and bKash Payment Integration.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "propertyId",
+			"value": "cuid_property_id",
+			"type": "string"
+		},
+		{
+			"key": "roomId",
+			"value": "cuid_room_id",
+			"type": "string"
+		},
+		{
+			"key": "applicationId",
+			"value": "cuid_application_id",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "cuid_user_id",
+			"type": "string"
+		},
+		{
+			"key": "paymentId",
+			"value": "cuid_payment_id",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register New User (Tenant / Owner / Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+8801700000000\",\n  \"role\": \"TENANT\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						},
+						"description": "Public route to register a new user."
+					}
+				},
+				{
+					"name": "Login User (Credential Login)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data) {",
+									"    if (jsonData.data.accessToken) {",
+									"        pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+									"    }",
+									"    if (jsonData.data.refreshToken) {",
+									"        pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						},
+						"description": "Public route to authenticate credentials and receive JWT accessToken and set HttpOnly refreshToken cookie."
+					}
+				},
+				{
+					"name": "Refresh Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.accessToken) {",
+									"    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh-token",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "refresh-token"]
+						},
+						"description": "Public route to refresh JWT access token using a valid refresh token."
+					}
+				},
+				{
+					"name": "Logout User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "logout"]
+						},
+						"description": "Authenticated route to log out user and clear refresh token cookie."
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Users & Profiles",
+			"item": [
+				{
+					"name": "Get Own Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "me"]
+						},
+						"description": "Authenticated route to get current logged-in user profile."
+					}
+				},
+				{
+					"name": "Update Own Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Johnathan Doe\",\n  \"phone\": \"+8801711111111\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "me"]
+						},
+						"description": "Authenticated route to update current logged-in user profile."
+					}
+				},
+				{
+					"name": "Get User By ID (Public Info)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "{{userId}}"]
+						},
+						"description": "Public route to get limited profile information of a user."
+					}
+				},
+				{
+					"name": "Change User Role (Admin Only)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"OWNER\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}/role",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "{{userId}}", "role"]
+						},
+						"description": "Admin only route to update a user's system role."
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Properties",
+			"item": [
+				{
+					"name": "Create Property (Owner Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Modern Sunset Apartment\",\n  \"description\": \"Spacious 3-bedroom flat in Dhanmondi\",\n  \"address\": \"Road 27, House 45\",\n  \"city\": \"Dhaka\",\n  \"state\": \"Dhaka\",\n  \"country\": \"Bangladesh\",\n  \"zipCode\": \"1209\",\n  \"propertyType\": \"Apartment\",\n  \"amenities\": [\"WiFi\", \"Parking\", \"Lift\", \"Generator\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/properties",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties"]
+						},
+						"description": "Owner route to list a new property."
+					}
+				},
+				{
+					"name": "List Properties (Filtered & Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/properties?page=1&limit=10&city=Dhaka&minRent=5000&maxRent=25000&sortBy=createdAt&sortOrder=desc",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" },
+								{ "key": "city", "value": "Dhaka" },
+								{ "key": "minRent", "value": "5000" },
+								{ "key": "maxRent", "value": "25000" },
+								{ "key": "sortBy", "value": "createdAt" },
+								{ "key": "sortOrder", "value": "desc" }
+							]
+						},
+						"description": "Public route to list properties with pagination and query filters."
+					}
+				},
+				{
+					"name": "Search Properties by Keyword",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/properties/search?q=Sunset",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "search"],
+							"query": [
+								{ "key": "q", "value": "Sunset" }
+							]
+						},
+						"description": "Public route to search properties by keyword."
+					}
+				},
+				{
+					"name": "Get Property Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}"]
+						},
+						"description": "Public route to fetch single property details."
+					}
+				},
+				{
+					"name": "Update Property (Owner Only)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Sunset Apartment\",\n  \"amenities\": [\"WiFi\", \"Parking\", \"Lift\", \"Generator\", \"Security\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}"]
+						},
+						"description": "Owner route to update own property details."
+					}
+				},
+				{
+					"name": "Soft Delete Property (Owner Only)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}"]
+						},
+						"description": "Owner route to soft delete a property."
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Rooms",
+			"item": [
+				{
+					"name": "Add Room to Property (Owner Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"roomNumber\": \"101-A\",\n  \"roomType\": \"Single\",\n  \"capacity\": 1,\n  \"rentAmount\": 12000,\n  \"securityDeposit\": 12000,\n  \"description\": \"Master bedroom with attached balcony and bathroom\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}/rooms",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}", "rooms"]
+						},
+						"description": "Owner route to add a room to a property."
+					}
+				},
+				{
+					"name": "List Rooms in Property",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}/rooms",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}", "rooms"]
+						},
+						"description": "Public route to list all rooms belonging to a property."
+					}
+				},
+				{
+					"name": "Get Room Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}"]
+						},
+						"description": "Public route to fetch single room details."
+					}
+				},
+				{
+					"name": "Update Room (Owner Only)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rentAmount\": 11500,\n  \"isAvailable\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}"]
+						},
+						"description": "Owner route to update room details."
+					}
+				},
+				{
+					"name": "Update Room Availability Dates",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"availableFrom\": \"2026-10-01T00:00:00.000Z\",\n  \"availableTo\": \"2027-10-01T00:00:00.000Z\",\n  \"isAvailable\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}/availability",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}", "availability"]
+						},
+						"description": "Owner route to set room available dates."
+					}
+				},
+				{
+					"name": "Soft Delete Room (Owner Only)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}"]
+						},
+						"description": "Owner route to soft delete a room."
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Applications (Booking Workflow)",
+			"item": [
+				{
+					"name": "Apply for a Room (Tenant Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"roomId\": \"{{roomId}}\",\n  \"moveInDate\": \"2026-10-01T00:00:00.000Z\",\n  \"message\": \"I am interested in renting this single room for 1 year.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": ["{{baseUrl}}"],
+							"path": ["applications"]
+						},
+						"description": "Tenant route to submit a booking application for a room."
+					}
+				},
+				{
+					"name": "Get My Applications (Tenant)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications/my",
+							"host": ["{{baseUrl}}"],
+							"path": ["applications", "my"]
+						},
+						"description": "Tenant route to view own submitted room applications."
+					}
+				},
+				{
+					"name": "List Applications for Property (Owner)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications/for-property/{{propertyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["applications", "for-property", "{{propertyId}}"]
+						},
+						"description": "Owner route to view applications for their property."
+					}
+				},
+				{
+					"name": "Get Application Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications/{{applicationId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["applications", "{{applicationId}}"]
+						},
+						"description": "Tenant or Owner route to get application details."
+					}
+				},
+				{
+					"name": "Update Application Status (Approve / Reject / Cancel)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"APPROVED\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/applications/{{applicationId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["applications", "{{applicationId}}", "status"]
+						},
+						"description": "Owner (Approve/Reject) or Tenant (Cancel) route to change application status."
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Business Operations & Maintenance",
+			"item": [
+				{
+					"name": "Request Property Viewing (Tenant)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scheduledAt\": \"2026-09-25T15:00:00.000Z\",\n  \"notes\": \"Would like to inspect room 101-A\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/properties/{{propertyId}}/viewing-requests",
+							"host": ["{{baseUrl}}"],
+							"path": ["properties", "{{propertyId}}", "viewing-requests"]
+						},
+						"description": "Tenant route to schedule property viewing."
+					}
+				},
+				{
+					"name": "List Viewing Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/viewing-requests",
+							"host": ["{{baseUrl}}"],
+							"path": ["viewing-requests"]
+						},
+						"description": "List viewing requests for logged-in user."
+					}
+				},
+				{
+					"name": "Submit Maintenance Request (Tenant)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"AC Cooling Issue\",\n  \"description\": \"The air conditioner in room 101-A is not cooling properly.\",\n  \"priority\": \"HIGH\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}/maintenance",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}", "maintenance"]
+						},
+						"description": "Tenant route to submit room maintenance request."
+					}
+				},
+				{
+					"name": "List Maintenance Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/maintenance-requests",
+							"host": ["{{baseUrl}}"],
+							"path": ["maintenance-requests"]
+						},
+						"description": "Get maintenance requests."
+					}
+				},
+				{
+					"name": "Assign Tenant to Room (Owner Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tenantId\": \"{{userId}}\",\n  \"applicationId\": \"{{applicationId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rooms/{{roomId}}/assign",
+							"host": ["{{baseUrl}}"],
+							"path": ["rooms", "{{roomId}}", "assign"]
+						},
+						"description": "Owner route to assign tenant to room after application approval."
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Payments (bKash Payment Integration)",
+			"item": [
+				{
+					"name": "Initiate bKash Rent / Deposit Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"applicationId\": \"{{applicationId}}\",\n  \"amount\": 12000,\n  \"paymentMethod\": \"bKash\",\n  \"paymentType\": \"RENT\",\n  \"description\": \"Monthly rent payment via bKash gateway\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/payments/bkash/initiate",
+							"host": ["{{baseUrl}}"],
+							"path": ["payments", "bkash", "initiate"]
+						},
+						"description": "Initiates bKash payment gateway checkout URL for rent or deposit."
+					}
+				},
+				{
+					"name": "bKash Payment Callback / Execution",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/payments/bkash/callback?paymentID=PAYMENT_ID_EXAMPLE&status=success",
+							"host": ["{{baseUrl}}"],
+							"path": ["payments", "bkash", "callback"],
+							"query": [
+								{ "key": "paymentID", "value": "PAYMENT_ID_EXAMPLE" },
+								{ "key": "status", "value": "success" }
+							]
+						},
+						"description": "bKash gateway callback endpoint to execute and confirm transaction status."
+					}
+				},
+				{
+					"name": "Get Payment Details & Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/payments/{{paymentId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["payments", "{{paymentId}}"]
+						},
+						"description": "Fetches payment status, gateway transaction ID, and metadata."
+					}
+				}
+			]
+		}
+	]
+}

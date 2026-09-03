@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import config from "./app/config/index.js";
 import { prisma } from "./app/lib/prisma.js";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
+import { AuthRoutes } from "./app/modules/auth/auth.router.js";
 
 const app: Application = express();
 
@@ -60,6 +61,9 @@ app.get("/health", async (_req: Request, res: Response) => {
 		});
 	}
 });
+
+// Application API Routes
+app.use("/api/v1/auth", AuthRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {
