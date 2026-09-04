@@ -31,7 +31,7 @@ app.get("/", (_req: Request, res: Response) => {
 		message: "Welcome to Housing & Roommate Management Platform API",
 		data: {
 			version: "1.0.0",
-			docs: "/api/v1/docs",
+			docs: "/api/docs",
 		},
 	});
 });
@@ -64,8 +64,8 @@ app.get("/health", async (_req: Request, res: Response) => {
 });
 
 // Application API Routes
-app.use("/api/v1/auth", AuthRoutes);
-app.use("/api/v1/users", UserRoutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/users", UserRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {

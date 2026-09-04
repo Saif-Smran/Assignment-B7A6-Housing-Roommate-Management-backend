@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!**/*.ejs"]
+		"includes": ["**", "!**/*.ejs", "!src/generated"]
 	},
 	"formatter": {
 		"enabled": true,

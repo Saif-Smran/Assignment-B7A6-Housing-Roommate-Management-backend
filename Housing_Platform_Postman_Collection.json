@@ -8,7 +8,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:5000/api/v1",
+			"value": "http://localhost:5000/api",
 			"type": "string"
 		},
 		{
@@ -228,32 +228,6 @@
 							"path": ["users", "{{userId}}"]
 						},
 						"description": "Public route to get limited profile information of a user."
-					}
-				},
-				{
-					"name": "Change User Role (Admin Only)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"role\": \"OWNER\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/{{userId}}/role",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "{{userId}}", "role"]
-						},
-						"description": "Admin only route to update a user's system role."
 					}
 				}
 			]
@@ -803,6 +777,140 @@
 							"path": ["payments", "{{paymentId}}"]
 						},
 						"description": "Fetches payment status, gateway transaction ID, and metadata."
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Admin Operations",
+			"item": [
+				{
+					"name": "List All Users (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?page=1&limit=10&role=TENANT",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" },
+								{ "key": "role", "value": "TENANT" }
+							]
+						},
+						"description": "Admin route to list all users with pagination and role filtering."
+					}
+				},
+				{
+					"name": "Change User Role (Admin Only)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"OWNER\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}/role",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "{{userId}}", "role"]
+						},
+						"description": "Admin only route to update a user's system role."
+					}
+				},
+				{
+					"name": "Get Dashboard & Platform Statistics (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/dashboard-stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "dashboard-stats"]
+						},
+						"description": "Admin route to retrieve platform-wide overview statistics (users, properties, revenue, applications)."
+					}
+				},
+				{
+					"name": "Get Audit Logs (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/audit-logs?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "audit-logs"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						},
+						"description": "Admin route to view system audit logs."
+					}
+				},
+				{
+					"name": "List All Properties (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/properties?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "properties"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						},
+						"description": "Admin route to list all platform properties including inactive and deleted ones."
+					}
+				},
+				{
+					"name": "Hard Delete Property (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/properties/{{propertyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "properties", "{{propertyId}}"]
+						},
+						"description": "Admin route to hard delete a property record."
 					}
 				}
 			]

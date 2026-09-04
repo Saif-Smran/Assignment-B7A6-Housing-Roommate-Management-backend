@@ -335,7 +335,7 @@ model AuditLog {
 ```
 
 ## 5. API Endpoints (20+)
-All endpoints are prefixed with `/api/v1` and return a standard JSON response format:
+All endpoints are prefixed with `/api` and return a standard JSON response format:
 
 **Success:**
 ```json
@@ -493,7 +493,7 @@ All endpoints are prefixed with `/api/v1` and return a standard JSON response fo
 
 ## 8. Example API Request/Response
 
-### POST `/api/v1/auth/login`
+### POST `/api/auth/login`
 **Request:**
 ```json
 { "email": "john@example.com", "password": "securepass" }
@@ -512,7 +512,7 @@ All endpoints are prefixed with `/api/v1` and return a standard JSON response fo
 }
 ```
 
-### GET `/api/v1/properties?page=1&limit=10&city=Dhaka&minRent=5000`
+### GET `/api/properties?page=1&limit=10&city=Dhaka&minRent=5000`
 **Response:**
 ```json
 {
