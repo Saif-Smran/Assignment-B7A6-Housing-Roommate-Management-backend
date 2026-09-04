@@ -9,6 +9,7 @@ import config from "./app/config/index.js";
 import { prisma } from "./app/lib/prisma.js";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
 import { AuthRoutes } from "./app/modules/auth/auth.router.js";
+import { UserRoutes } from "./app/modules/user/user.route.js";
 
 const app: Application = express();
 
@@ -64,6 +65,7 @@ app.get("/health", async (_req: Request, res: Response) => {
 
 // Application API Routes
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1/users", UserRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {

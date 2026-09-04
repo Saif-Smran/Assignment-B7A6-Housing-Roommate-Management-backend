@@ -113,7 +113,8 @@ export const getBkashIdToken = async () => {
 		if (error instanceof AppError) {
 			throw error;
 		}
-		const message = error instanceof Error ? error.message : "Bkash Token Error";
+		const message =
+			error instanceof Error ? error.message : "Bkash Token Error";
 		throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, message);
 	}
 };

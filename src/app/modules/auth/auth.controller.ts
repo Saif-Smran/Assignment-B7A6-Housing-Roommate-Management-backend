@@ -49,10 +49,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
 			: undefined);
 
 	if (!token) {
-		throw new AppError(
-			httpStatus.UNAUTHORIZED,
-			"Refresh token is required!",
-		);
+		throw new AppError(httpStatus.UNAUTHORIZED, "Refresh token is required!");
 	}
 
 	const result = await AuthService.refreshToken(token);

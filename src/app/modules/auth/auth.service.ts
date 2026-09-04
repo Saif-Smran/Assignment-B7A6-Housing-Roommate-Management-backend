@@ -13,7 +13,9 @@ import type {
 	TSanitizedUser,
 } from "./auth.interface.js";
 
-const registerUser = async (payload: TRegisterUser): Promise<TSanitizedUser> => {
+const registerUser = async (
+	payload: TRegisterUser,
+): Promise<TSanitizedUser> => {
 	const existingUser = await prisma.user.findUnique({
 		where: {
 			email: payload.email,
@@ -62,10 +64,7 @@ const loginUser = async (payload: TLoginUser): Promise<TLoginResponse> => {
 	});
 
 	if (!user) {
-		throw new AppError(
-			httpStatus.UNAUTHORIZED,
-			"Invalid email or password!",
-		);
+		throw new AppError(httpStatus.UNAUTHORIZED, "Invalid email or password!");
 	}
 
 	if (user.deletedAt) {
@@ -81,10 +80,7 @@ const loginUser = async (payload: TLoginUser): Promise<TLoginResponse> => {
 	);
 
 	if (!isPasswordMatched) {
-		throw new AppError(
-			httpStatus.UNAUTHORIZED,
-			"Invalid email or password!",
-		);
+		throw new AppError(httpStatus.UNAUTHORIZED, "Invalid email or password!");
 	}
 
 	const jwtPayload = {
@@ -118,14 +114,17 @@ const loginUser = async (payload: TLoginUser): Promise<TLoginResponse> => {
 	};
 };
 
-const refreshToken = async (token: string): Promise<{ accessToken: string }> => {
+const refreshToken = async (
+	token: string,
+): Promise<{ accessToken: string }> => {
 	let decoded: { id: string; email: string; role: Role };
 
 	try {
-		decoded = jwt.verify(
-			token,
-			config.jwt.refresh_secret,
-		) as { id: string; email: string; role: Role };
+		decoded = jwt.verify(token, config.jwt.refresh_secret) as {
+			id: string;
+			email: string;
+			role: Role;
+		};
 	} catch (_err) {
 		throw new AppError(
 			httpStatus.UNAUTHORIZED,
