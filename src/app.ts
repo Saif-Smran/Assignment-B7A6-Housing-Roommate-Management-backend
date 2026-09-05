@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import config from "./app/config/index.js";
 import { prisma } from "./app/lib/prisma.js";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
+import { ApplicationRoutes } from "./app/modules/application/application.route.js";
 import { AuthRoutes } from "./app/modules/auth/auth.router.js";
 import { PropertyRoutes } from "./app/modules/property/property.route.js";
 import { RoomRoutes } from "./app/modules/room/room.route.js";
@@ -70,6 +71,7 @@ app.use("/api/auth", AuthRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/properties", PropertyRoutes);
 app.use("/api/rooms", RoomRoutes);
+app.use("/api/applications", ApplicationRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {
