@@ -10,7 +10,7 @@ import type {
 	TUpdateRoom,
 	TUpdateRoomAvailability,
 } from "./room.interface.js";
-
+ 
 const createRoom = async (
 	propertyId: string,
 	userId: string,
@@ -34,7 +34,7 @@ const createRoom = async (
 			"Forbidden! You do not have permission to add room to this property.",
 		);
 	}
-
+ 
 	const roomData = {
 		...payload,
 		propertyId,
@@ -63,7 +63,7 @@ const createRoom = async (
 
 	return newRoom;
 };
-
+ 
 const getRoomsByProperty = async (propertyId: string) => {
 	const property = await prisma.property.findFirst({
 		where: {
