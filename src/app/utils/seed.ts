@@ -1,6 +1,14 @@
 import bcrypt from "bcryptjs";
 import httpStatus from "http-status";
-import { Role } from "../../generated/prisma/client.js";
+import {
+	ApplicationStatus,
+	MaintenanceStatus,
+	PaymentStatus,
+	PaymentType,
+	Priority,
+	Role,
+	ViewingStatus,
+} from "../../generated/prisma/client.js";
 import config from "../config/index.js";
 import { prisma } from "../lib/prisma.js";
 import { AppError } from "./AppError.js";
@@ -234,11 +242,210 @@ export const seedTesterTenant = async () => {
 	}
 };
 
+// Seed Applications for Tester Tenant
+export const seedTesterApplications = async () => {
+	try {
+		const tenant = await prisma.user.findUnique({
+			where: { email: config.tester_tenant.email },
+		});
+
+		if (!tenant) {
+			console.log("Tester tenant not found for application seeding!");
+			return;
+		}
+
+		const owner = await prisma.user.findUnique({
+			where: { email: config.tester_owner.email },
+		});
+
+		if (!owner) {
+			console.log("Tester owner not found for application seeding!");
+			return;
+		}
+
+		const property = await prisma.property.findFirst({
+			where: { ownerId: owner.id, deletedAt: null },
+			include: { rooms: true },
+		});
+
+		if (!property || property.rooms.length === 0) {
+			console.log("No property or rooms found for application seeding!");
+			return;
+		}
+
+		const room101 =
+			property.rooms.find((r) => r.roomNumber === "A-101") ||
+			property.rooms[0];
+		const room102 =
+			property.rooms.find((r) => r.roomNumber === "A-102") ||
+			property.rooms[1] ||
+			property.rooms[0];
+
+		// Check if pending application exists
+		const isApp1Exist = await prisma.application.findFirst({
+			where: { tenantId: tenant.id, roomId: room101.id, deletedAt: null },
+		});
+
+		if (!isApp1Exist) {
+			const app1 = await prisma.application.create({
+				data: {
+					tenantId: tenant.id,
+					roomId: room101.id,
+					status: ApplicationStatus.PENDING,
+					moveInDate: new Date("2026-10-01T00:00:00.000Z"),
+					moveOutDate: new Date("2027-10-01T00:00:00.000Z"),
+					message:
+						"I am interested in renting this Master Bedroom (A-101) for 12 months.",
+				},
+			});
+			console.log("Pending Application Seeded : ", app1.id);
+		} else {
+			console.log("Pending Application Already Exists!");
+		}
+
+		// Check if approved application exists
+		if (room102 && room102.id !== room101.id) {
+			const isApp2Exist = await prisma.application.findFirst({
+				where: { tenantId: tenant.id, roomId: room102.id, deletedAt: null },
+			});
+
+			if (!isApp2Exist) {
+				const app2 = await prisma.application.create({
+					data: {
+						tenantId: tenant.id,
+						roomId: room102.id,
+						status: ApplicationStatus.APPROVED,
+						moveInDate: new Date("2026-09-15T00:00:00.000Z"),
+						moveOutDate: new Date("2027-09-15T00:00:00.000Z"),
+						message: "Applying for Single Room (A-102).",
+					},
+				});
+				console.log("Approved Application Seeded : ", app2.id);
+			} else {
+				console.log("Approved Application Already Exists!");
+			}
+		}
+	} catch (error) {
+		console.log("Error Seeding Tester Applications : ", error);
+	}
+};
+
+// Seed Business Operations (Viewing Requests, Maintenance Requests, Payments)
+export const seedTesterBusinessOps = async () => {
+	try {
+		const tenant = await prisma.user.findUnique({
+			where: { email: config.tester_tenant.email },
+		});
+
+		const owner = await prisma.user.findUnique({
+			where: { email: config.tester_owner.email },
+		});
+
+		if (!tenant || !owner) {
+			return;
+		}
+
+		const property = await prisma.property.findFirst({
+			where: { ownerId: owner.id, deletedAt: null },
+			include: { rooms: true },
+		});
+
+		if (!property) {
+			return;
+		}
+
+		// 1. Seed Viewing Request
+		const isViewingExist = await prisma.viewingRequest.findFirst({
+			where: { propertyId: property.id, tenantId: tenant.id },
+		});
+
+		if (!isViewingExist) {
+			const viewing = await prisma.viewingRequest.create({
+				data: {
+					propertyId: property.id,
+					tenantId: tenant.id,
+					scheduledAt: new Date("2026-09-25T15:00:00.000Z"),
+					status: ViewingStatus.PENDING,
+					notes:
+						"Would like to inspect room A-101 and overall apartment amenities.",
+				},
+			});
+			console.log("Viewing Request Seeded : ", viewing.id);
+		} else {
+			console.log("Viewing Request Already Exists!");
+		}
+
+		// 2. Seed Maintenance Request
+		const room = property.rooms[0];
+		if (room) {
+			const isMaintenanceExist = await prisma.maintenanceRequest.findFirst({
+				where: { roomId: room.id, tenantId: tenant.id },
+			});
+
+			if (!isMaintenanceExist) {
+				const maintenance = await prisma.maintenanceRequest.create({
+					data: {
+						roomId: room.id,
+						tenantId: tenant.id,
+						title: "Air Conditioner Maintenance",
+						description:
+							"The split AC unit in Room A-101 requires servicing and filter replacement.",
+						status: MaintenanceStatus.SUBMITTED,
+						priority: Priority.HIGH,
+					},
+				});
+				console.log("Maintenance Request Seeded : ", maintenance.id);
+			} else {
+				console.log("Maintenance Request Already Exists!");
+			}
+		}
+
+		// 3. Seed Payment for Approved Application
+		const approvedApp = await prisma.application.findFirst({
+			where: {
+				tenantId: tenant.id,
+				status: ApplicationStatus.APPROVED,
+				deletedAt: null,
+			},
+		});
+
+		if (approvedApp) {
+			const isPaymentExist = await prisma.payment.findFirst({
+				where: { applicationId: approvedApp.id, userId: tenant.id },
+			});
+
+			if (!isPaymentExist) {
+				const payment = await prisma.payment.create({
+					data: {
+						applicationId: approvedApp.id,
+						userId: tenant.id,
+						amount: 10000.0,
+						currency: "BDT",
+						paymentMethod: "bKash",
+						transactionId: "TRX_BKASH_SEED_998877",
+						status: PaymentStatus.COMPLETED,
+						paymentType: PaymentType.RENT,
+						description: "Initial rent payment for Room A-102 via bKash",
+					},
+				});
+				console.log("Payment Record Seeded : ", payment.id);
+			} else {
+				console.log("Payment Record Already Exists!");
+			}
+		}
+	} catch (error) {
+		console.log("Error Seeding Business Operations : ", error);
+	}
+};
+
 // Main Seeder Function
 export const seedDatabase = async () => {
 	console.log("🌱 Starting Database Seeding...");
 	await seedTesterAdmin();
 	await seedTesterOwner();
 	await seedTesterTenant();
+	await seedTesterApplications();
+	await seedTesterBusinessOps();
 	console.log("✅ Database Seeding Completed.");
 };
+

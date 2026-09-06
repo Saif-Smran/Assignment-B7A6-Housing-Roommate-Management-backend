@@ -508,14 +508,18 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/applications",
-							"host": ["{{baseUrl}}"],
-							"path": ["applications"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
 						},
-						"description": "Tenant route to submit a booking application for a room."
+						"description": "Tenant route to submit a booking application for a room. Access: Tenant"
 					}
 				},
 				{
-					"name": "Get My Applications (Tenant)",
+					"name": "List Applications (With Filters)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -525,29 +529,37 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/applications/my",
-							"host": ["{{baseUrl}}"],
-							"path": ["applications", "my"]
+							"raw": "{{baseUrl}}/applications?page=1&limit=10&status=PENDING&sortBy=createdAt&sortOrder=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "PENDING"
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc"
+								}
+							]
 						},
-						"description": "Tenant route to view own submitted room applications."
-					}
-				},
-				{
-					"name": "List Applications for Property (Owner)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/applications/for-property/{{propertyId}}",
-							"host": ["{{baseUrl}}"],
-							"path": ["applications", "for-property", "{{propertyId}}"]
-						},
-						"description": "Owner route to view applications for their property."
+						"description": "List applications with pagination and status filters. Access: Tenant / Owner"
 					}
 				},
 				{
@@ -562,10 +574,15 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/applications/{{applicationId}}",
-							"host": ["{{baseUrl}}"],
-							"path": ["applications", "{{applicationId}}"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"{{applicationId}}"
+							]
 						},
-						"description": "Tenant or Owner route to get application details."
+						"description": "Get application details by ID. Access: Tenant / Owner"
 					}
 				},
 				{
@@ -588,10 +605,63 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/applications/{{applicationId}}/status",
-							"host": ["{{baseUrl}}"],
-							"path": ["applications", "{{applicationId}}", "status"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"{{applicationId}}",
+								"status"
+							]
 						},
-						"description": "Owner (Approve/Reject) or Tenant (Cancel) route to change application status."
+						"description": "Owner (Approve/Reject) or Tenant (Cancel) route to change application status. Access: Owner / Tenant"
+					}
+				},
+				{
+					"name": "Get My Applications (Tenant)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications/my",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"my"
+							]
+						},
+						"description": "Tenant route to view own submitted room applications. Access: Tenant"
+					}
+				},
+				{
+					"name": "List Applications for Property (Owner)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications/for-property/{{propertyId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"for-property",
+								"{{propertyId}}"
+							]
+						},
+						"description": "Owner route to view applications for their property. Access: Owner (own)"
 					}
 				}
 			]
