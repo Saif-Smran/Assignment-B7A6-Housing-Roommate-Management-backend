@@ -131,6 +131,33 @@ const updateRoomAvailability = catchAsync(
 	},
 );
 
+const assignTenantToRoom = catchAsync(async (req: Request, res: Response) => {
+	const id = req.params.id as string;
+	const userId = req.user?.id;
+	const userRole = req.user?.role;
+
+	if (!userId || !userRole) {
+		throw new AppError(
+			httpStatus.UNAUTHORIZED,
+			"You are not authorized! Token is missing or invalid.",
+		);
+	}
+
+	const result = await RoomService.assignTenantToRoom(
+		id,
+		userId,
+		userRole,
+		req.body,
+	);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "Tenant assigned to room successfully",
+		data: result,
+	});
+});
+
 export const RoomController = {
 	createRoom,
 	getRoomsByProperty,
@@ -138,4 +165,5 @@ export const RoomController = {
 	updateRoom,
 	softDeleteRoom,
 	updateRoomAvailability,
+	assignTenantToRoom,
 };

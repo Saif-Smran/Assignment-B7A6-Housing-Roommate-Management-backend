@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import {
+	ApplicationStatus,
 	type Role,
 	Role as RoleEnum,
 } from "../../../generated/prisma/client.js";
@@ -283,6 +284,86 @@ const updateRoomAvailability = async (
 	return updatedRoom;
 };
 
+const assignTenantToRoom = async (
+	roomId: string,
+	userId: string,
+	userRole: Role,
+	payload: { tenantId: string; applicationId?: string },
+) => {
+	const existingRoom = await prisma.room.findFirst({
+		where: {
+			id: roomId,
+			deletedAt: null,
+		},
+		include: {
+			property: true,
+		},
+	});
+
+	if (!existingRoom) {
+		throw new AppError(httpStatus.NOT_FOUND, "Room not found!");
+	}
+
+	if (userRole !== RoleEnum.ADMIN && existingRoom.property.ownerId !== userId) {
+		throw new AppError(
+			httpStatus.FORBIDDEN,
+			"Forbidden! You do not have permission to assign a tenant to this room.",
+		);
+	}
+
+	const tenant = await prisma.user.findUnique({
+		where: { id: payload.tenantId },
+	});
+
+	if (!tenant || tenant.deletedAt) {
+		throw new AppError(httpStatus.NOT_FOUND, "Tenant user not found!");
+	}
+
+	const approvedApplication = await prisma.application.findFirst({
+		where: {
+			roomId,
+			tenantId: payload.tenantId,
+			status: ApplicationStatus.APPROVED,
+			deletedAt: null,
+		},
+	});
+
+	if (!approvedApplication) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Cannot assign room! Tenant does not have an approved application for this room.",
+		);
+	}
+
+	const updatedRoom = await prisma.room.update({
+		where: { id: roomId },
+		data: {
+			isAvailable: false,
+		},
+		include: {
+			property: {
+				select: {
+					id: true,
+					title: true,
+					address: true,
+					city: true,
+				},
+			},
+		},
+	});
+
+	return {
+		room: updatedRoom,
+		assignedTenant: {
+			id: tenant.id,
+			fullName: tenant.fullName,
+			email: tenant.email,
+			phone: tenant.phone,
+		},
+		applicationId: approvedApplication.id,
+	};
+};
+
 export const RoomService = {
 	createRoom,
 	getRoomsByProperty,
@@ -290,4 +371,5 @@ export const RoomService = {
 	updateRoom,
 	softDeleteRoom,
 	updateRoomAvailability,
+	assignTenantToRoom,
 };

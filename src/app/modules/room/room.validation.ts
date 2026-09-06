@@ -102,8 +102,16 @@ const updateRoomAvailabilityZodSchema = z.object({
 	}),
 });
 
+const assignTenantZodSchema = z.object({
+	body: z.object({
+		tenantId: z.string({ message: "Tenant ID is required" }),
+		applicationId: z.string().optional(),
+	}),
+});
+
 export const RoomValidation = {
 	createRoomZodSchema,
 	updateRoomZodSchema,
 	updateRoomAvailabilityZodSchema,
+	assignTenantZodSchema,
 };

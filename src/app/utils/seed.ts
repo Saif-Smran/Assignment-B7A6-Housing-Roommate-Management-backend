@@ -274,8 +274,7 @@ export const seedTesterApplications = async () => {
 		}
 
 		const room101 =
-			property.rooms.find((r) => r.roomNumber === "A-101") ||
-			property.rooms[0];
+			property.rooms.find((r) => r.roomNumber === "A-101") || property.rooms[0];
 		const room102 =
 			property.rooms.find((r) => r.roomNumber === "A-102") ||
 			property.rooms[1] ||
@@ -448,4 +447,3 @@ export const seedDatabase = async () => {
 	await seedTesterBusinessOps();
 	console.log("✅ Database Seeding Completed.");
 };
-
