@@ -11,12 +11,21 @@ import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
 import { ApplicationRoutes } from "./app/modules/application/application.route.js";
 import { AuthRoutes } from "./app/modules/auth/auth.router.js";
 import { MaintenanceRequestRoutes } from "./app/modules/maintenance/maintenance.route.js";
+import { PaymentController } from "./app/modules/payment/payment.controller.js";
+import { PaymentRoutes } from "./app/modules/payment/payment.route.js";
 import { PropertyRoutes } from "./app/modules/property/property.route.js";
 import { RoomRoutes } from "./app/modules/room/room.route.js";
 import { UserRoutes } from "./app/modules/user/user.route.js";
 import { ViewingRequestRoutes } from "./app/modules/viewing/viewing.route.js";
 
 const app: Application = express();
+
+// Stripe Webhook raw body endpoint (must be registered before express.json)
+app.post(
+	"/api/payments/webhook",
+	express.raw({ type: "application/json" }),
+	PaymentController.handleWebhook,
+);
 
 // Middlewares
 app.use(
@@ -76,6 +85,7 @@ app.use("/api/rooms", RoomRoutes);
 app.use("/api/applications", ApplicationRoutes);
 app.use("/api/viewing-requests", ViewingRequestRoutes);
 app.use("/api/maintenance-requests", MaintenanceRequestRoutes);
+app.use("/api/payments", PaymentRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {

@@ -57,13 +57,5 @@ export default {
 		publishable_key:
 			process.env.STRIPE_PUBLISHABLE_KEY || process.env.STRIPE_PUBLIC_KEY,
 		webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
-	},
-	bkash: {
-		base_url: process.env.BKASH_BASE_URL,
-		username: process.env.BKASH_USERNAME,
-		password: process.env.BKASH_PASSWORD,
-		app_key: process.env.BKASH_APP_KEY,
-		app_secret: process.env.BKASH_APP_SECRET,
-		callback_url: process.env.BKASH_CALLBACK_URL,
-	},
+	}
 };
