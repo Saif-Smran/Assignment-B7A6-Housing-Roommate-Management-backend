@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import {
 	ApplicationStatus,
 	MaintenanceStatus,
+	PaymentGateway,
 	PaymentStatus,
 	PaymentType,
 	Priority,
@@ -419,11 +420,11 @@ export const seedTesterBusinessOps = async () => {
 						userId: tenant.id,
 						amount: 10000.0,
 						currency: "BDT",
-						paymentMethod: "bKash",
-						transactionId: "TRX_BKASH_SEED_998877",
+						paymentMethod: PaymentGateway.STRIPE,
+						transactionId: "TRX_STRIPE_SEED_998877",
 						status: PaymentStatus.COMPLETED,
 						paymentType: PaymentType.RENT,
-						description: "Initial rent payment for Room A-102 via bKash",
+						description: "Initial rent payment for Room A-102 via Stripe",
 					},
 				});
 				console.log("Payment Record Seeded : ", payment.id);

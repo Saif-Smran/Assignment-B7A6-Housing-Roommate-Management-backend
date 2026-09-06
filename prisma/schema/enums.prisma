@@ -50,3 +50,8 @@ enum BillStatus {
   PARTIALLY_PAID
   PAID
 }
+
+enum PaymentGateway {
+  SSLCOMMERZ
+  STRIPE
+}

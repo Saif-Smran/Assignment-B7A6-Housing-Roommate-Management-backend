@@ -52,6 +52,12 @@ export default {
 		api_key: process.env.CLOUDINARY_API_KEY,
 		api_secret: process.env.CLOUDINARY_API_SECRET,
 	},
+	stripe: {
+		secret_key: process.env.STRIPE_SECRET_KEY,
+		publishable_key:
+			process.env.STRIPE_PUBLISHABLE_KEY || process.env.STRIPE_PUBLIC_KEY,
+		webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+	},
 	bkash: {
 		base_url: process.env.BKASH_BASE_URL,
 		username: process.env.BKASH_USERNAME,

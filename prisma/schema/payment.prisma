@@ -6,7 +6,7 @@ model Payment {
   user          User          @relation(fields: [userId], references: [id])
   amount        Float
   currency      String        @default("BDT")
-  paymentMethod String // bKash, Stripe, SSLCommerz
+  paymentMethod PaymentGateway @default(STRIPE)
   transactionId String? // from gateway
   status        PaymentStatus @default(PENDING)
   paymentType   PaymentType // RENT, DEPOSIT, UTILITY

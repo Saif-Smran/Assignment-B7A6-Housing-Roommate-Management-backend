@@ -84,3 +84,11 @@ export const BillStatus = {
 } as const
 
 export type BillStatus = (typeof BillStatus)[keyof typeof BillStatus]
+
+
+export const PaymentGateway = {
+  SSLCOMMERZ: 'SSLCOMMERZ',
+  STRIPE: 'STRIPE'
+} as const
+
+export type PaymentGateway = (typeof PaymentGateway)[keyof typeof PaymentGateway]
