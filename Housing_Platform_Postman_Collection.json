@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "b7a6-housing-roommate-platform-api",
 		"name": "Housing & Roommate Management Platform API",
-		"description": "Postman collection for Housing & Roommate Management Platform API. Includes Authentication, Profile, Properties, Rooms, Applications, Maintenance, Viewing Requests, and bKash Payment Integration.",
+		"description": "Postman collection for Housing & Roommate Management Platform API. Includes Authentication, Profile, Properties, Rooms, Applications, Maintenance, Viewing Requests, and Stripe Payment Integration.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -848,10 +848,24 @@
 			]
 		},
 		{
-			"name": "7. Payments (bKash Payment Integration)",
+			"name": "7. Payments (Stripe Payment Integration)",
 			"item": [
 				{
-					"name": "Initiate bKash Rent / Deposit Payment",
+					"name": "Initiate Stripe Rent / Deposit Payment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.payment && jsonData.data.payment.id) {",
+									"    pm.collectionVariables.set('paymentId', jsonData.data.payment.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -866,35 +880,72 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"applicationId\": \"{{applicationId}}\",\n  \"amount\": 12000,\n  \"paymentMethod\": \"bKash\",\n  \"paymentType\": \"RENT\",\n  \"description\": \"Monthly rent payment via bKash gateway\"\n}"
+							"raw": "{\n  \"applicationId\": \"{{applicationId}}\",\n  \"amount\": 12000,\n  \"paymentType\": \"RENT\",\n  \"description\": \"Monthly rent payment via Stripe gateway\",\n  \"successUrl\": \"http://localhost:3000/payment/success\",\n  \"cancelUrl\": \"http://localhost:3000/payment/cancel\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/payments/bkash/initiate",
-							"host": ["{{baseUrl}}"],
-							"path": ["payments", "bkash", "initiate"]
-						},
-						"description": "Initiates bKash payment gateway checkout URL for rent or deposit."
-					}
-				},
-				{
-					"name": "bKash Payment Callback / Execution",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/payments/bkash/callback?paymentID=PAYMENT_ID_EXAMPLE&status=success",
-							"host": ["{{baseUrl}}"],
-							"path": ["payments", "bkash", "callback"],
-							"query": [
-								{ "key": "paymentID", "value": "PAYMENT_ID_EXAMPLE" },
-								{ "key": "status", "value": "success" }
+							"raw": "{{baseUrl}}/payments/initiate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payments",
+								"initiate"
 							]
 						},
-						"description": "bKash gateway callback endpoint to execute and confirm transaction status."
+						"description": "Initiates Stripe Checkout session URL and payment record for rent, deposit, or utility. Access: Tenant"
 					}
 				},
 				{
-					"name": "Get Payment Details & Status",
+					"name": "Get My Payments (Filtered & Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/payments/my?page=1&limit=10&status=PENDING&paymentType=RENT&sortBy=createdAt&sortOrder=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payments",
+								"my"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "PENDING"
+								},
+								{
+									"key": "paymentType",
+									"value": "RENT"
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc"
+								}
+							]
+						},
+						"description": "Fetches payments list for current user with filters and pagination. Access: Tenant / Owner / Admin"
+					}
+				},
+				{
+					"name": "Get Payment Details by ID",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -905,10 +956,46 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/payments/{{paymentId}}",
-							"host": ["{{baseUrl}}"],
-							"path": ["payments", "{{paymentId}}"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payments",
+								"{{paymentId}}"
+							]
 						},
-						"description": "Fetches payment status, gateway transaction ID, and metadata."
+						"description": "Fetches single payment details, status, and Stripe transaction metadata by Payment ID. Access: Tenant / Owner / Admin"
+					}
+				},
+				{
+					"name": "Stripe Webhook (Handle Webhook Event)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "stripe-signature",
+								"value": "t=12345678,v1=signature_hash_here"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"checkout.session.completed\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"cs_test_123456\",\n      \"metadata\": {\n        \"paymentId\": \"{{paymentId}}\"\n      }\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/payments/webhook",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payments",
+								"webhook"
+							]
+						},
+						"description": "Stripe gateway webhook endpoint to process real-time payment notifications."
 					}
 				}
 			]
