@@ -374,21 +374,28 @@ export const seedTesterBusinessOps = async () => {
 			console.log("Viewing Request Already Exists!");
 		}
 
-		// 2. Seed Maintenance Request
-		const room = property.rooms[0];
-		if (room) {
+		// 2. Seed Maintenance Request for Room with Approved Application
+		const approvedApp = await prisma.application.findFirst({
+			where: {
+				tenantId: tenant.id,
+				status: ApplicationStatus.APPROVED,
+				deletedAt: null,
+			},
+		});
+
+		if (approvedApp) {
 			const isMaintenanceExist = await prisma.maintenanceRequest.findFirst({
-				where: { roomId: room.id, tenantId: tenant.id },
+				where: { roomId: approvedApp.roomId, tenantId: tenant.id },
 			});
 
 			if (!isMaintenanceExist) {
 				const maintenance = await prisma.maintenanceRequest.create({
 					data: {
-						roomId: room.id,
+						roomId: approvedApp.roomId,
 						tenantId: tenant.id,
 						title: "Air Conditioner Maintenance",
 						description:
-							"The split AC unit in Room A-101 requires servicing and filter replacement.",
+							"The split AC unit in Room A-102 requires servicing and filter replacement.",
 						status: MaintenanceStatus.SUBMITTED,
 						priority: Priority.HIGH,
 					},
@@ -400,14 +407,6 @@ export const seedTesterBusinessOps = async () => {
 		}
 
 		// 3. Seed Payment for Approved Application
-		const approvedApp = await prisma.application.findFirst({
-			where: {
-				tenantId: tenant.id,
-				status: ApplicationStatus.APPROVED,
-				deletedAt: null,
-			},
-		});
-
 		if (approvedApp) {
 			const isPaymentExist = await prisma.payment.findFirst({
 				where: { applicationId: approvedApp.id, userId: tenant.id },

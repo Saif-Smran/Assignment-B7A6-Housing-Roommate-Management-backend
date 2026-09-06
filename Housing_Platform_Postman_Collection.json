@@ -45,6 +45,16 @@
 			"key": "paymentId",
 			"value": "cuid_payment_id",
 			"type": "string"
+		},
+		{
+			"key": "viewingRequestId",
+			"value": "cuid_viewing_request_id",
+			"type": "string"
+		},
+		{
+			"key": "maintenanceRequestId",
+			"value": "cuid_maintenance_request_id",
+			"type": "string"
 		}
 	],
 	"item": [
@@ -710,7 +720,33 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["viewing-requests"]
 						},
-						"description": "List viewing requests for logged-in user."
+						"description": "List viewing requests for logged-in user. Access: Tenant / Owner / Admin"
+					}
+				},
+				{
+					"name": "Update Viewing Request Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"CONFIRMED\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/viewing-requests/{{viewingRequestId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["viewing-requests", "{{viewingRequestId}}", "status"]
+						},
+						"description": "Owner (Confirm/Complete) or Tenant (Cancel) route to change viewing request status. Access: Owner (own) / Tenant (own) / Admin"
 					}
 				},
 				{
@@ -736,7 +772,7 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["rooms", "{{roomId}}", "maintenance"]
 						},
-						"description": "Tenant route to submit room maintenance request."
+						"description": "Tenant route to submit room maintenance request. Access: Booked Tenant (must have approved application)"
 					}
 				},
 				{
@@ -754,7 +790,33 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["maintenance-requests"]
 						},
-						"description": "Get maintenance requests."
+						"description": "Get maintenance requests. Access: Tenant / Owner / Admin"
+					}
+				},
+				{
+					"name": "Update Maintenance Request Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"assignedTo\": \"Service Technician\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/maintenance-requests/{{maintenanceRequestId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["maintenance-requests", "{{maintenanceRequestId}}", "status"]
+						},
+						"description": "Owner or Admin route to update maintenance request status. Access: Owner / Admin"
 					}
 				},
 				{
@@ -780,7 +842,7 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["rooms", "{{roomId}}", "assign"]
 						},
-						"description": "Owner route to assign tenant to room after application approval."
+						"description": "Owner route to assign tenant to room after application approval. Access: Owner (own) / Admin"
 					}
 				}
 			]
