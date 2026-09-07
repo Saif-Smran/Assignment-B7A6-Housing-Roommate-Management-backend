@@ -52,7 +52,6 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Application: 'Application',
-  AuditLog: 'AuditLog',
   MaintenanceRequest: 'MaintenanceRequest',
   Notification: 'Notification',
   Payment: 'Payment',
@@ -95,21 +94,6 @@ export const ApplicationScalarFieldEnum = {
 } as const
 
 export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[keyof typeof ApplicationScalarFieldEnum]
-
-
-export const AuditLogScalarFieldEnum = {
-  id: 'id',
-  actorId: 'actorId',
-  action: 'action',
-  targetType: 'targetType',
-  targetId: 'targetId',
-  changes: 'changes',
-  ipAddress: 'ipAddress',
-  userAgent: 'userAgent',
-  createdAt: 'createdAt'
-} as const
-
-export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const MaintenanceRequestScalarFieldEnum = {

@@ -218,7 +218,6 @@ export type UserWhereInput = {
   applications?: Prisma.ApplicationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   maintenance?: Prisma.MaintenanceRequestListRelationFilter
-  auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   viewingRequests?: Prisma.ViewingRequestListRelationFilter
   utilitySplits?: Prisma.UtilitySplitListRelationFilter
@@ -238,7 +237,6 @@ export type UserOrderByWithRelationInput = {
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   maintenance?: Prisma.MaintenanceRequestOrderByRelationAggregateInput
-  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   viewingRequests?: Prisma.ViewingRequestOrderByRelationAggregateInput
   utilitySplits?: Prisma.UtilitySplitOrderByRelationAggregateInput
@@ -261,7 +259,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   applications?: Prisma.ApplicationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   maintenance?: Prisma.MaintenanceRequestListRelationFilter
-  auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   viewingRequests?: Prisma.ViewingRequestListRelationFilter
   utilitySplits?: Prisma.UtilitySplitListRelationFilter
@@ -311,7 +308,6 @@ export type UserCreateInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
@@ -331,7 +327,6 @@ export type UserUncheckedCreateInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
@@ -351,7 +346,6 @@ export type UserUpdateInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
@@ -371,7 +365,6 @@ export type UserUncheckedUpdateInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
@@ -466,20 +459,6 @@ export type UserUpdateOneRequiredWithoutApplicationsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutApplicationsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApplicationsInput, Prisma.UserUpdateWithoutApplicationsInput>, Prisma.UserUncheckedUpdateWithoutApplicationsInput>
-}
-
-export type UserCreateNestedOneWithoutAuditLogsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
-  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
 export type UserCreateNestedOneWithoutMaintenanceInput = {
@@ -583,7 +562,6 @@ export type UserCreateWithoutApplicationsInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
@@ -602,7 +580,6 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
@@ -637,7 +614,6 @@ export type UserUpdateWithoutApplicationsInput = {
   properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
@@ -654,99 +630,6 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
-  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
-  viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
-  utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type UserCreateWithoutAuditLogsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  fullName: string
-  phone?: string | null
-  role?: $Enums.Role
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
-  applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
-  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
-  viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
-  utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
-}
-
-export type UserUncheckedCreateWithoutAuditLogsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  fullName: string
-  phone?: string | null
-  role?: $Enums.Role
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
-  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
-  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
-  viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
-  utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type UserCreateOrConnectWithoutAuditLogsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-}
-
-export type UserUpsertWithoutAuditLogsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
-}
-
-export type UserUpdateWithoutAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
-  applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
-  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
-  viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
-  utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
-  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
@@ -767,7 +650,6 @@ export type UserCreateWithoutMaintenanceInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
@@ -786,7 +668,6 @@ export type UserUncheckedCreateWithoutMaintenanceInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
@@ -821,7 +702,6 @@ export type UserUpdateWithoutMaintenanceInput = {
   properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
@@ -840,7 +720,6 @@ export type UserUncheckedUpdateWithoutMaintenanceInput = {
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
@@ -860,7 +739,6 @@ export type UserCreateWithoutNotificationsInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
 }
@@ -879,7 +757,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -914,7 +791,6 @@ export type UserUpdateWithoutNotificationsInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
 }
@@ -933,7 +809,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -951,7 +826,6 @@ export type UserCreateWithoutPaymentsInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
@@ -970,7 +844,6 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
@@ -1005,7 +878,6 @@ export type UserUpdateWithoutPaymentsInput = {
   properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
@@ -1024,7 +896,6 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
@@ -1043,7 +914,6 @@ export type UserCreateWithoutPropertiesInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
@@ -1062,7 +932,6 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
@@ -1097,7 +966,6 @@ export type UserUpdateWithoutPropertiesInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
@@ -1116,7 +984,6 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
@@ -1136,7 +1003,6 @@ export type UserCreateWithoutUtilitySplitsInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestCreateNestedManyWithoutTenantInput
 }
@@ -1155,7 +1021,6 @@ export type UserUncheckedCreateWithoutUtilitySplitsInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   viewingRequests?: Prisma.ViewingRequestUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1190,7 +1055,6 @@ export type UserUpdateWithoutUtilitySplitsInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUpdateManyWithoutTenantNestedInput
 }
@@ -1209,7 +1073,6 @@ export type UserUncheckedUpdateWithoutUtilitySplitsInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   viewingRequests?: Prisma.ViewingRequestUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1228,7 +1091,6 @@ export type UserCreateWithoutViewingRequestsInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutReceiverInput
   utilitySplits?: Prisma.UtilitySplitCreateNestedManyWithoutTenantInput
 }
@@ -1247,7 +1109,6 @@ export type UserUncheckedCreateWithoutViewingRequestsInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTenantInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutTenantInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput
   utilitySplits?: Prisma.UtilitySplitUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1282,7 +1143,6 @@ export type UserUpdateWithoutViewingRequestsInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput
   utilitySplits?: Prisma.UtilitySplitUpdateManyWithoutTenantNestedInput
 }
@@ -1301,7 +1161,6 @@ export type UserUncheckedUpdateWithoutViewingRequestsInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTenantNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput
   utilitySplits?: Prisma.UtilitySplitUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1316,7 +1175,6 @@ export type UserCountOutputType = {
   applications: number
   payments: number
   maintenance: number
-  auditLogs: number
   notifications: number
   viewingRequests: number
   utilitySplits: number
@@ -1327,7 +1185,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   applications?: boolean | UserCountOutputTypeCountApplicationsArgs
   payments?: boolean | UserCountOutputTypeCountPaymentsArgs
   maintenance?: boolean | UserCountOutputTypeCountMaintenanceArgs
-  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   viewingRequests?: boolean | UserCountOutputTypeCountViewingRequestsArgs
   utilitySplits?: boolean | UserCountOutputTypeCountUtilitySplitsArgs
@@ -1374,13 +1231,6 @@ export type UserCountOutputTypeCountMaintenanceArgs<ExtArgs extends runtime.Type
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuditLogWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationWhereInput
 }
@@ -1414,7 +1264,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   maintenance?: boolean | Prisma.User$maintenanceArgs<ExtArgs>
-  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   viewingRequests?: boolean | Prisma.User$viewingRequestsArgs<ExtArgs>
   utilitySplits?: boolean | Prisma.User$utilitySplitsArgs<ExtArgs>
@@ -1463,7 +1312,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   maintenance?: boolean | Prisma.User$maintenanceArgs<ExtArgs>
-  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   viewingRequests?: boolean | Prisma.User$viewingRequestsArgs<ExtArgs>
   utilitySplits?: boolean | Prisma.User$utilitySplitsArgs<ExtArgs>
@@ -1479,7 +1327,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     maintenance: Prisma.$MaintenanceRequestPayload<ExtArgs>[]
-    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     viewingRequests: Prisma.$ViewingRequestPayload<ExtArgs>[]
     utilitySplits: Prisma.$UtilitySplitPayload<ExtArgs>[]
@@ -1892,7 +1739,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   applications<T extends Prisma.User$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   maintenance<T extends Prisma.User$maintenanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$maintenanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenanceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   viewingRequests<T extends Prisma.User$viewingRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$viewingRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ViewingRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   utilitySplits<T extends Prisma.User$utilitySplitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$utilitySplitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UtilitySplitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2420,30 +2266,6 @@ export type User$maintenanceArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.MaintenanceRequestScalarFieldEnum | Prisma.MaintenanceRequestScalarFieldEnum[]
-}
-
-/**
- * User.auditLogs
- */
-export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AuditLog
-   */
-  select?: Prisma.AuditLogSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AuditLog
-   */
-  omit?: Prisma.AuditLogOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuditLogInclude<ExtArgs> | null
-  where?: Prisma.AuditLogWhereInput
-  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
-  cursor?: Prisma.AuditLogWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**

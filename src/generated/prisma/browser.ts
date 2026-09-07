@@ -23,11 +23,6 @@ export * from './enums';
  */
 export type Application = Prisma.ApplicationModel
 /**
- * Model AuditLog
- * 
- */
-export type AuditLog = Prisma.AuditLogModel
-/**
  * Model MaintenanceRequest
  * 
  */

@@ -9,7 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Application'
-export type * from './models/AuditLog'
 export type * from './models/MaintenanceRequest'
 export type * from './models/Notification'
 export type * from './models/Payment'
