@@ -16,17 +16,19 @@ This project is a backend REST API for a Housing & Roommate Management Platform.
 ## 2. Tech Stack
 | Category | Technology | Purpose |
 | --- | --- | --- |
-| Runtime & Framework | Node.js, TypeScript, Express.js | REST API development with type safety |
-| Database & ORM | PostgreSQL + Prisma | Relational database with relations, indexing, transactions |
+| Runtime & Framework | Node.js, TypeScript, Express.js v5 | REST API development with type safety |
+| Build Tool | TSUP | Fast zero-config bundler generating ESNext ESM modules |
+| Database & ORM | PostgreSQL + Prisma ORM | Relational database with relations, indexing, transactions |
 | Validation | Zod | Strict API-level input validation |
-| Linting & Formatting | Biome / ESLint / Prettier | Code quality and consistency |
-| Caching & State | Redis (optional) | Caching, rate limiting, temporary state |
-| Authentication | Custom JWT with bcrypt | Email/Password login, role-based access |
-| Email (Optional) | Nodemailer / Resend | Transactional emails (notifications) |
-| File Storage | Multer & Cloudinary | Upload property images, documents |
-| Payments | bKash / Stripe / SSLCommerz | Real payment processing and status tracking |
-| Documentation | Postman / Swagger (OpenAPI) | API testing and interactive documentation |
-| Deployment | Vercel (Serverless) / Render | Production backend deployment |
+| Linting & Formatting | Biome (`@biomejs/biome`) | Code quality, linting, and formatting |
+| Caching & State | Redis (`redis`) | Caching, rate limiting, temporary state |
+| Authentication | Custom JWT (`jsonwebtoken`), `bcryptjs`, Google OAuth 2.0 | Email/Password login, Google SSO, role-based access |
+| Cron & Automation | Vercel Cron Jobs | Serverless background tasks (`/api/cron` in `src/app/lib/cron.ts`) |
+| Email & Documents | Nodemailer, PDFKit | Transactional email notifications & PDF invoices |
+| File Storage | Multer (`memoryStorage`) & Cloudinary | Ephemeral memory uploads directly to Cloudinary cloud storage |
+| Payments | Stripe (`stripe`) | Real payment processing, checkout sessions & webhooks |
+| Documentation | Postman Collection | API testing and interactive documentation |
+| Deployment | Vercel (Serverless) | Serverless backend deployment with `@vercel/node` |
 
 ## 3. Core Project Rules
 
