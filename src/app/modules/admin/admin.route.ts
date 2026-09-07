@@ -20,8 +20,6 @@ router.patch(
 
 router.get("/dashboard-stats", AdminController.getDashboardStats);
 
-router.get("/audit-logs", AdminController.getAuditLogs);
-
 router.get("/properties", AdminController.getAllPropertiesAdmin);
 
 router.delete("/properties/:id", AdminController.hardDeleteProperty);

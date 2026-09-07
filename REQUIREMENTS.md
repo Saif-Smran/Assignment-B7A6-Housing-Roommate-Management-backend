@@ -434,7 +434,6 @@ All endpoints are prefixed with `/api` and return a standard JSON response forma
 | GET | `/admin/users` | List all users | Admin |
 | PATCH | `/admin/users/:id/role` | Update user role | Admin |
 | GET | `/admin/dashboard-stats` | Platform statistics | Admin |
-| GET | `/admin/audit-logs` | Retrieve audit logs | Admin |
 | GET | `/admin/properties` | List all properties (with filters) | Admin |
 | DELETE | `/admin/properties/:id` | Hard delete (if needed) | Admin |
 

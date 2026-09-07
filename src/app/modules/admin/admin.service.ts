@@ -4,7 +4,6 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
 	TAdminPropertyQueryFilters,
-	TAuditLogQueryFilters,
 	TUserQueryFilters,
 } from "./admin.interface.js";
 
@@ -170,62 +169,6 @@ const getDashboardStats = async () => {
 	};
 };
 
-const getAuditLogs = async (query: TAuditLogQueryFilters) => {
-	const page = Math.max(1, Number(query.page) || 1);
-	const limit = Math.max(1, Math.min(100, Number(query.limit) || 10));
-	const skip = (page - 1) * limit;
-
-	const { action, targetType, actorId, sortBy, sortOrder } = query;
-
-	const whereConditions: Prisma.AuditLogWhereInput = {};
-
-	if (action) {
-		whereConditions.action = { contains: action, mode: "insensitive" };
-	}
-	if (targetType) {
-		whereConditions.targetType = { equals: targetType, mode: "insensitive" };
-	}
-	if (actorId) {
-		whereConditions.actorId = actorId;
-	}
-
-	const allowedSortFields = ["createdAt", "action", "targetType"];
-	const validSortBy =
-		sortBy && allowedSortFields.includes(sortBy) ? sortBy : "createdAt";
-	const validSortOrder: "asc" | "desc" = sortOrder === "asc" ? "asc" : "desc";
-
-	const total = await prisma.auditLog.count({ where: whereConditions });
-
-	const auditLogs = await prisma.auditLog.findMany({
-		where: whereConditions,
-		skip,
-		take: limit,
-		orderBy: { [validSortBy]: validSortOrder },
-		include: {
-			actor: {
-				select: {
-					id: true,
-					fullName: true,
-					email: true,
-					role: true,
-				},
-			},
-		},
-	});
-
-	const totalPages = Math.ceil(total / limit);
-
-	return {
-		meta: {
-			page,
-			limit,
-			total,
-			totalPages,
-		},
-		data: auditLogs,
-	};
-};
-
 const getAllPropertiesAdmin = async (query: TAdminPropertyQueryFilters) => {
 	const page = Math.max(1, Number(query.page) || 1);
 	const limit = Math.max(1, Math.min(100, Number(query.limit) || 10));
@@ -356,7 +299,6 @@ export const AdminService = {
 	getAllUsers,
 	updateUserRole,
 	getDashboardStats,
-	getAuditLogs,
 	getAllPropertiesAdmin,
 	hardDeleteProperty,
 };

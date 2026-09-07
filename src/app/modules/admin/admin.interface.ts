@@ -22,13 +22,3 @@ export interface TAdminPropertyQueryFilters {
 	sortBy?: string;
 	sortOrder?: "asc" | "desc";
 }
-
-export interface TAuditLogQueryFilters {
-	page?: string | number;
-	limit?: string | number;
-	action?: string;
-	targetType?: string;
-	actorId?: string;
-	sortBy?: string;
-	sortOrder?: "asc" | "desc";
-}

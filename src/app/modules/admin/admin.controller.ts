@@ -5,7 +5,6 @@ import { catchAsync } from "../../utils/catchAsync.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import type {
 	TAdminPropertyQueryFilters,
-	TAuditLogQueryFilters,
 	TUserQueryFilters,
 } from "./admin.interface.js";
 import { AdminService } from "./admin.service.js";
@@ -48,19 +47,6 @@ const getDashboardStats = catchAsync(async (_req: Request, res: Response) => {
 	});
 });
 
-const getAuditLogs = catchAsync(async (req: Request, res: Response) => {
-	const result = await AdminService.getAuditLogs(
-		req.query as TAuditLogQueryFilters,
-	);
-
-	sendResponse(res, {
-		statusCode: httpStatus.OK,
-		success: true,
-		message: "Audit logs retrieved successfully",
-		data: result,
-	});
-});
-
 const getAllPropertiesAdmin = catchAsync(async (req: Request, res: Response) => {
 	const result = await AdminService.getAllPropertiesAdmin(
 		req.query as TAdminPropertyQueryFilters,
@@ -91,7 +77,6 @@ export const AdminController = {
 	getAllUsers,
 	updateUserRole,
 	getDashboardStats,
-	getAuditLogs,
 	getAllPropertiesAdmin,
 	hardDeleteProperty,
 };

@@ -14,7 +14,6 @@ model User {
   applications    Application[]
   payments        Payment[]
   maintenance     MaintenanceRequest[]
-  auditLogs       AuditLog[]           @relation("Actor")
   notifications   Notification[]       @relation("Receiver")
   viewingRequests ViewingRequest[]
   utilitySplits   UtilitySplit[]
