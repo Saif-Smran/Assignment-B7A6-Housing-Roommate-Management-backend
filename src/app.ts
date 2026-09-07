@@ -11,6 +11,7 @@ import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
 import { AdminRoutes } from "./app/modules/admin/admin.route.js";
 import { ApplicationRoutes } from "./app/modules/application/application.route.js";
 import { AuthRoutes } from "./app/modules/auth/auth.router.js";
+import { handleCronJob } from "./app/lib/cron.js";
 import { MaintenanceRequestRoutes } from "./app/modules/maintenance/maintenance.route.js";
 import { PaymentController } from "./app/modules/payment/payment.controller.js";
 import { PaymentRoutes } from "./app/modules/payment/payment.route.js";
@@ -88,6 +89,7 @@ app.use("/api/viewing-requests", ViewingRequestRoutes);
 app.use("/api/maintenance-requests", MaintenanceRequestRoutes);
 app.use("/api/payments", PaymentRoutes);
 app.use("/api/admin", AdminRoutes);
+app.get("/api/cron", handleCronJob);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {

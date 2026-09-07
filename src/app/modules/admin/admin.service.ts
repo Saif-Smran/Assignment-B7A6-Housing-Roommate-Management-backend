@@ -174,7 +174,16 @@ const getAllPropertiesAdmin = async (query: TAdminPropertyQueryFilters) => {
 	const limit = Math.max(1, Math.min(100, Number(query.limit) || 10));
 	const skip = (page - 1) * limit;
 
-	const { city, propertyType, isActive, isDeleted, searchTerm, q, sortBy, sortOrder } = query;
+	const {
+		city,
+		propertyType,
+		isActive,
+		isDeleted,
+		searchTerm,
+		q,
+		sortBy,
+		sortOrder,
+	} = query;
 	const search = searchTerm || q;
 
 	const whereConditions: Prisma.PropertyWhereInput = {};
@@ -194,7 +203,10 @@ const getAllPropertiesAdmin = async (query: TAdminPropertyQueryFilters) => {
 	}
 
 	if (propertyType) {
-		whereConditions.propertyType = { equals: propertyType, mode: "insensitive" };
+		whereConditions.propertyType = {
+			equals: propertyType,
+			mode: "insensitive",
+		};
 	}
 
 	if (search) {

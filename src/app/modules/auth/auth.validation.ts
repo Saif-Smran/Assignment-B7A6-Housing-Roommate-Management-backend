@@ -32,7 +32,8 @@ const googleLoginZodSchema = z.object({
 			role: z.nativeEnum(Role).optional(),
 		})
 		.refine(
-			(data) => data.idToken || data.credential || data.accessToken || data.code,
+			(data) =>
+				data.idToken || data.credential || data.accessToken || data.code,
 			{
 				message:
 					"At least one of idToken, credential, accessToken, or code is required for Google authentication",

@@ -51,7 +51,9 @@ const updateOwnProfile = async (
 		data: {
 			...(payload.fullName && { fullName: payload.fullName }),
 			...(payload.phone !== undefined && { phone: payload.phone }),
-			...(payload.profileImage !== undefined && { profileImage: payload.profileImage }),
+			...(payload.profileImage !== undefined && {
+				profileImage: payload.profileImage,
+			}),
 		},
 		select: {
 			id: true,

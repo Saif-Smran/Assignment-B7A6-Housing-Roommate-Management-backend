@@ -10,9 +10,7 @@ import type {
 import { AdminService } from "./admin.service.js";
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-	const result = await AdminService.getAllUsers(
-		req.query as TUserQueryFilters,
-	);
+	const result = await AdminService.getAllUsers(req.query as TUserQueryFilters);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
@@ -47,18 +45,20 @@ const getDashboardStats = catchAsync(async (_req: Request, res: Response) => {
 	});
 });
 
-const getAllPropertiesAdmin = catchAsync(async (req: Request, res: Response) => {
-	const result = await AdminService.getAllPropertiesAdmin(
-		req.query as TAdminPropertyQueryFilters,
-	);
+const getAllPropertiesAdmin = catchAsync(
+	async (req: Request, res: Response) => {
+		const result = await AdminService.getAllPropertiesAdmin(
+			req.query as TAdminPropertyQueryFilters,
+		);
 
-	sendResponse(res, {
-		statusCode: httpStatus.OK,
-		success: true,
-		message: "Admin properties retrieved successfully",
-		data: result,
-	});
-});
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "Admin properties retrieved successfully",
+			data: result,
+		});
+	},
+);
 
 const hardDeleteProperty = catchAsync(async (req: Request, res: Response) => {
 	const id = req.params.id as string;

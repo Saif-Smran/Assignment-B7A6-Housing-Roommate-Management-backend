@@ -10,19 +10,23 @@ async function main() {
 	try {
 		await prisma.$connect();
 		console.log("🗄️  Database connected successfully!");
-		await seedDatabase();
-		server = app.listen(config.port, () => {
-			console.log(
-				`🚀 Server running in ${config.node_env} mode on http://localhost:${config.port}`,
-			);
-		});
+		if (!process.env.VERCEL) {
+			await seedDatabase();
+			server = app.listen(config.port, () => {
+				console.log(
+					`🚀 Server running in ${config.node_env} mode on http://localhost:${config.port}`,
+				);
+			});
+		}
 	} catch (error) {
 		console.error("❌ Failed to start server:", error);
 		process.exit(1);
 	}
 }
 
-main();
+if (!process.env.VERCEL) {
+	main();
+}
 
 // Process signal & exception handlers for graceful shutdown
 process.on("unhandledRejection", (reason, promise) => {
@@ -57,3 +61,5 @@ process.on("SIGTERM", () => {
 		});
 	}
 });
+
+export default app;

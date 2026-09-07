@@ -1,4 +1,7 @@
-import type { PaymentStatus, PaymentType } from "../../../generated/prisma/client.js";
+import type {
+	PaymentStatus,
+	PaymentType,
+} from "../../../generated/prisma/client.js";
 
 export interface TInitiatePaymentInput {
 	applicationId?: string;

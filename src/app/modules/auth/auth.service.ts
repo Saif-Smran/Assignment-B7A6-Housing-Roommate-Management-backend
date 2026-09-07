@@ -154,9 +154,7 @@ const googleLogin = async (
 			if (payloadData && payloadData.email) {
 				email = payloadData.email;
 				fullName =
-					payloadData.name ||
-					payloadData.given_name ||
-					email.split("@")[0];
+					payloadData.name || payloadData.given_name || email.split("@")[0];
 				googleId = payloadData.sub;
 				profileImage = payloadData.picture;
 			}
@@ -224,10 +222,7 @@ const googleLogin = async (
 
 	let user = await prisma.user.findFirst({
 		where: {
-			OR: [
-				...(googleId ? [{ googleId }] : []),
-				{ email: email.toLowerCase() },
-			],
+			OR: [...(googleId ? [{ googleId }] : []), { email: email.toLowerCase() }],
 		},
 	});
 

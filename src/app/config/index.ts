@@ -57,5 +57,5 @@ export default {
 		publishable_key:
 			process.env.STRIPE_PUBLISHABLE_KEY || process.env.STRIPE_PUBLIC_KEY,
 		webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
-	}
+	},
 };
