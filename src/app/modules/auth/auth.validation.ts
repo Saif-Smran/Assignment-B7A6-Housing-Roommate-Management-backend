@@ -22,6 +22,24 @@ const loginZodSchema = z.object({
 	}),
 });
 
+const googleLoginZodSchema = z.object({
+	body: z
+		.object({
+			idToken: z.string().optional(),
+			credential: z.string().optional(),
+			accessToken: z.string().optional(),
+			code: z.string().optional(),
+			role: z.nativeEnum(Role).optional(),
+		})
+		.refine(
+			(data) => data.idToken || data.credential || data.accessToken || data.code,
+			{
+				message:
+					"At least one of idToken, credential, accessToken, or code is required for Google authentication",
+			},
+		),
+});
+
 const refreshTokenZodSchema = z.object({
 	body: z
 		.object({
@@ -38,5 +56,6 @@ const refreshTokenZodSchema = z.object({
 export const AuthValidation = {
 	registerZodSchema,
 	loginZodSchema,
+	googleLoginZodSchema,
 	refreshTokenZodSchema,
 };

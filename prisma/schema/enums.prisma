@@ -55,3 +55,9 @@ enum PaymentGateway {
   SSLCOMMERZ
   STRIPE
 }
+
+enum AuthProvider {
+  CREDENTIAL
+  GOOGLE
+}
+

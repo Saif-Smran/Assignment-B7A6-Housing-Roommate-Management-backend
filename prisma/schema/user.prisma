@@ -1,12 +1,15 @@
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String?
+  googleId     String?      @unique
   fullName     String
   phone        String?
-  role         Role      @default(TENANT)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  profileImage String?
+  provider     AuthProvider @default(CREDENTIAL)
+  role         Role         @default(TENANT)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   deletedAt    DateTime?
 
   // Relations
@@ -20,4 +23,5 @@ model User {
 
   @@index([email])
   @@index([role])
+  @@index([googleId])
 }

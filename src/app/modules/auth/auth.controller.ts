@@ -40,6 +40,29 @@ const login = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+	const result = await AuthService.googleLogin(req.body);
+
+	const { refreshToken, accessToken, user } = result;
+
+	res.cookie("refreshToken", refreshToken, {
+		secure: config.node_env === "production",
+		httpOnly: true,
+		sameSite: config.node_env === "production" ? "none" : "lax",
+	});
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "User authenticated with Google successfully",
+		data: {
+			accessToken,
+			refreshToken,
+			user,
+		},
+	});
+});
+
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
 	const token =
 		req.cookies?.refreshToken ||
@@ -80,6 +103,7 @@ const logout = catchAsync(async (_req: Request, res: Response) => {
 export const AuthController = {
 	register,
 	login,
+	googleLogin,
 	refreshToken,
 	logout,
 };

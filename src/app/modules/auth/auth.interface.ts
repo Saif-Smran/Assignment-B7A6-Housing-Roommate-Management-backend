@@ -1,4 +1,4 @@
-import type { Role } from "../../../generated/prisma/client.js";
+import type { Role, AuthProvider } from "../../../generated/prisma/client.js";
 
 export type TRegisterUser = {
 	fullName: string;
@@ -13,6 +13,14 @@ export type TLoginUser = {
 	password: string;
 };
 
+export type TGoogleLoginUser = {
+	idToken?: string;
+	credential?: string;
+	accessToken?: string;
+	code?: string;
+	role?: Role;
+};
+
 export type TRefreshToken = {
 	refreshToken?: string;
 };
@@ -22,6 +30,9 @@ export type TSanitizedUser = {
 	fullName: string;
 	email: string;
 	phone: string | null;
+	googleId?: string | null;
+	profileImage?: string | null;
+	provider?: AuthProvider;
 	role: Role;
 	createdAt: Date;
 	updatedAt: Date;
