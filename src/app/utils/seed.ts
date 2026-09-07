@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import httpStatus from "http-status";
 import {
 	ApplicationStatus,
+	AuthProvider,
 	MaintenanceStatus,
 	PaymentGateway,
 	PaymentStatus,
@@ -49,6 +50,7 @@ export const seedTesterAdmin = async () => {
 				fullName: name,
 				email,
 				passwordHash: hashedPassword,
+				provider: AuthProvider.CREDENTIAL,
 				role: Role.ADMIN,
 			},
 		});
@@ -100,6 +102,7 @@ export const seedTesterOwner = async () => {
 					fullName: name,
 					email,
 					passwordHash: hashedPassword,
+					provider: AuthProvider.CREDENTIAL,
 					role: Role.OWNER,
 				},
 			});
@@ -225,6 +228,7 @@ export const seedTesterTenant = async () => {
 				fullName: name,
 				email,
 				passwordHash: hashedPassword,
+				provider: AuthProvider.CREDENTIAL,
 				role: Role.TENANT,
 			},
 		});
@@ -240,6 +244,36 @@ export const seedTesterTenant = async () => {
 				},
 			});
 		}
+	}
+};
+
+// Seed Tester Google User (Role: TENANT, AuthProvider: GOOGLE)
+export const seedTesterGoogleUser = async () => {
+	try {
+		const googleEmail = "testergoogle@example.com";
+		const isTesterGoogleUserExist = await prisma.user.findUnique({
+			where: { email: googleEmail },
+		});
+
+		if (isTesterGoogleUserExist) {
+			console.log("Tester Google User Already Exists!");
+			return;
+		}
+
+		const googleUser = await prisma.user.create({
+			data: {
+				fullName: "Tester Google User",
+				email: googleEmail,
+				googleId: "109876543210987654321",
+				provider: AuthProvider.GOOGLE,
+				profileImage: "https://lh3.googleusercontent.com/a/default-user-avatar",
+				role: Role.TENANT,
+			},
+		});
+
+		console.log("Tester Google User Created : ", googleUser);
+	} catch (error) {
+		console.log("Error Seeding Tester Google User : ", error);
 	}
 };
 
@@ -443,6 +477,7 @@ export const seedDatabase = async () => {
 	await seedTesterAdmin();
 	await seedTesterOwner();
 	await seedTesterTenant();
+	await seedTesterGoogleUser();
 	await seedTesterApplications();
 	await seedTesterBusinessOps();
 	console.log("✅ Database Seeding Completed.");
