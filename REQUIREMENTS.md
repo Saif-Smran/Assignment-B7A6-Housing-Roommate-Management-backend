@@ -438,13 +438,6 @@ All endpoints are prefixed with `/api` and return a standard JSON response forma
 | GET | `/admin/properties` | List all properties (with filters) | Admin |
 | DELETE | `/admin/properties/:id` | Hard delete (if needed) | Admin |
 
-### 5.9 Utility Bills (Advanced)
-| Method | Endpoint | Description | Access |
-| --- | --- | --- | --- |
-| POST | `/utility-bills` | Create utility bill (Owner/Admin) | Owner/Admin |
-| GET | `/utility-bills` | List utility bills | Owner/Tenant/Admin |
-| GET | `/utility-bills/:id/splits` | Get splits | Owner/Tenant |
-| POST | `/utility-bills/:id/pay-split` | Pay a split (Tenant) | Tenant |
 
 ## 6. Minimum API Coverage Summary
 - **Authentication**: 4 endpoints (register, login, refresh, logout)
@@ -453,7 +446,6 @@ All endpoints are prefixed with `/api` and return a standard JSON response forma
 - **Business Operations**: 8+ endpoints (applications, viewing, maintenance, assignment)
 - **Payment**: 4 endpoints (initiate, status, webhook, my payments)
 - **Admin**: 5 endpoints (users, role, stats, logs, properties)
-- **Utility**: 4 endpoints (create, list, splits, pay)
 
 *Total exceeds 20 distinct endpoints.*
 

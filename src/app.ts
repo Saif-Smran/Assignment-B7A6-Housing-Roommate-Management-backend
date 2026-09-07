@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import config from "./app/config/index.js";
 import { prisma } from "./app/lib/prisma.js";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler.js";
+import { AdminRoutes } from "./app/modules/admin/admin.route.js";
 import { ApplicationRoutes } from "./app/modules/application/application.route.js";
 import { AuthRoutes } from "./app/modules/auth/auth.router.js";
 import { MaintenanceRequestRoutes } from "./app/modules/maintenance/maintenance.route.js";
@@ -86,6 +87,7 @@ app.use("/api/applications", ApplicationRoutes);
 app.use("/api/viewing-requests", ViewingRequestRoutes);
 app.use("/api/maintenance-requests", MaintenanceRequestRoutes);
 app.use("/api/payments", PaymentRoutes);
+app.use("/api/admin", AdminRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {

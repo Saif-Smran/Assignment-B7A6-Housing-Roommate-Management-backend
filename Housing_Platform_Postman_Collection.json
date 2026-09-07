@@ -1045,9 +1045,9 @@
 							"raw": "{\n  \"role\": \"OWNER\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/{{userId}}/role",
+							"raw": "{{baseUrl}}/admin/users/{{userId}}/role",
 							"host": ["{{baseUrl}}"],
-							"path": ["users", "{{userId}}", "role"]
+							"path": ["admin", "users", "{{userId}}", "role"]
 						},
 						"description": "Admin only route to update a user's system role."
 					}
