@@ -85,9 +85,29 @@ const getMyPayments = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+const getOwnerEarnings = catchAsync(async (req: Request, res: Response) => {
+	const ownerId = req.user?.id;
+	if (!ownerId) {
+		throw new AppError(
+			httpStatus.UNAUTHORIZED,
+			"You are not authorized! Token is missing or invalid.",
+		);
+	}
+
+	const result = await PaymentService.getOwnerEarnings(ownerId);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "Owner earnings retrieved successfully",
+		data: result,
+	});
+});
+
 export const PaymentController = {
 	initiatePayment,
 	getPaymentById,
 	handleWebhook,
 	getMyPayments,
+	getOwnerEarnings,
 };

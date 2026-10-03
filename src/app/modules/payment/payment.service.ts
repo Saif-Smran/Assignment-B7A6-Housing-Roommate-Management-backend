@@ -27,8 +27,20 @@ const initiatePayment = async (
 	}
 
 	if (payload.applicationId) {
-		const application = await prisma.application.findUnique({
-			where: { id: payload.applicationId },
+		const application = await prisma.application.findFirst({
+			where: {
+				id: payload.applicationId,
+				deletedAt: null,
+			},
+			include: {
+				tenant: {
+					select: {
+						id: true,
+						fullName: true,
+						email: true,
+					},
+				},
+			},
 		});
 		if (!application) {
 			throw new AppError(httpStatus.NOT_FOUND, "Application not found");
@@ -138,6 +150,60 @@ const initiatePayment = async (
 	return {
 		payment: updatedPayment,
 		checkoutUrl,
+	};
+};
+
+const getOwnerEarnings = async (ownerId: string) => {
+	const ownerPaymentWhere: Prisma.PaymentWhereInput = {
+		status: PaymentStatus.COMPLETED,
+		application: {
+			room: {
+				property: {
+					ownerId,
+				},
+			},
+		},
+	};
+
+	const [summary, payments] = await Promise.all([
+		prisma.payment.aggregate({
+			where: ownerPaymentWhere,
+			_sum: { amount: true },
+			_count: { _all: true },
+		}),
+		prisma.payment.findMany({
+			where: ownerPaymentWhere,
+			orderBy: { createdAt: "desc" },
+			include: {
+				user: {
+					select: {
+						id: true,
+						fullName: true,
+						email: true,
+					},
+				},
+				application: {
+					include: {
+						room: {
+							include: {
+								property: {
+									select: {
+										id: true,
+										title: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}),
+	]);
+
+	return {
+		totalEarnings: summary._sum.amount ?? 0,
+		totalPayments: summary._count._all,
+		payments,
 	};
 };
 
@@ -431,4 +497,5 @@ export const PaymentService = {
 	getPaymentById,
 	handleWebhook,
 	getMyPayments,
+	getOwnerEarnings,
 };

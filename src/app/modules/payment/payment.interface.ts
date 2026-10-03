@@ -4,7 +4,7 @@ import type {
 } from "../../../generated/prisma/client.js";
 
 export interface TInitiatePaymentInput {
-	applicationId?: string;
+	applicationId: string;
 	amount: number;
 	paymentType: PaymentType;
 	description?: string;

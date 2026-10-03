@@ -3,7 +3,9 @@ import { PaymentType } from "../../../generated/prisma/client.js";
 
 const initiatePaymentZodSchema = z.object({
 	body: z.object({
-		applicationId: z.string().optional(),
+		applicationId: z.string({
+			message: "Application is required when initiating a payment",
+		}),
 		amount: z
 			.number({
 				message: "Amount is required and must be a number",

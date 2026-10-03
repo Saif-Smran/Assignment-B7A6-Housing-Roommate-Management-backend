@@ -14,6 +14,8 @@ router.post(
 	PaymentController.initiatePayment,
 );
 
+router.get("/earnings", auth(Role.OWNER), PaymentController.getOwnerEarnings);
+
 router.get(
 	"/my",
 	auth(Role.TENANT, Role.OWNER, Role.ADMIN),
