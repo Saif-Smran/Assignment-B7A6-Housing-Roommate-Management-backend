@@ -110,25 +110,12 @@ export const seedTesterOwner = async () => {
 			console.log("Tester Owner Created : ", testerOwner);
 		}
 
-		// Seed Property under the Owner
-		const isPropertyExist = await prisma.property.findFirst({
-			where: {
-				ownerId: testerOwner.id,
-				deletedAt: null,
-			},
-		});
-
-		if (isPropertyExist) {
-			console.log("Tester Property Already Exists!");
-			return;
-		}
-
-		const testerProperty = await prisma.property.create({
-			data: {
-				ownerId: testerOwner.id,
+		// Properties seed data (at least 6-7 properties with 2-4 rooms each)
+		const propertiesSeedList = [
+			{
 				title: "Sunset Heights Luxury Apartment",
 				description:
-					"Modern 3-bedroom apartment with panoramic city views and top-tier amenities.",
+					"Modern 3-bedroom apartment with panoramic city views, high ceilings, modular kitchen, and top-tier amenities.",
 				address: "45 Green Road, Dhanmondi",
 				city: "Dhaka",
 				state: "Dhaka Division",
@@ -142,54 +129,577 @@ export const seedTesterOwner = async () => {
 					"Elevator",
 					"Generator",
 					"24/7 Security",
+					"Balcony",
+					"CCTV",
 				],
 				isActive: true,
-				images: {
-					create: [
-						{
-							url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
-							isPrimary: true,
-						},
-					],
-				},
-				rooms: {
-					create: [
-						{
-							roomNumber: "A-101",
-							roomType: "Master Bedroom",
-							capacity: 2,
-							rentAmount: 15000,
-							securityDeposit: 30000,
-							isAvailable: true,
-							description:
-								"Spacious master bedroom with attached bath and balcony.",
-						},
-						{
-							roomNumber: "A-102",
-							roomType: "Single Room",
-							capacity: 1,
-							rentAmount: 10000,
-							securityDeposit: 20000,
-							isAvailable: true,
-							description:
-								"Cozy single room with study desk and modern furniture.",
-						},
-					],
-				},
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
+						isPrimary: true,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb",
+						isPrimary: false,
+					},
+					{
+						url: "https://res.cloudinary.com/demo/image/upload/kitchen.jpg",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "A-101",
+						roomType: "Master Bedroom",
+						capacity: 2,
+						rentAmount: 15000,
+						securityDeposit: 30000,
+						isAvailable: true,
+						description:
+							"Spacious master bedroom with attached bath and private balcony.",
+					},
+					{
+						roomNumber: "A-102",
+						roomType: "Single Room",
+						capacity: 1,
+						rentAmount: 10000,
+						securityDeposit: 20000,
+						isAvailable: true,
+						description:
+							"Cozy single room with study desk and modern furniture.",
+					},
+					{
+						roomNumber: "A-103",
+						roomType: "Double Bedroom",
+						capacity: 2,
+						rentAmount: 12000,
+						securityDeposit: 24000,
+						isAvailable: true,
+						description:
+							"Well-lit double bedroom with built-in wooden closet and window view.",
+					},
+				],
 			},
-		});
+			{
+				title: "Greenwood Lakeview Residence",
+				description:
+					"Scenic condo overlooking the serene lake, equipped with marble floors, smart home controls, and lush greenery.",
+				address: "12 Lake Circus, Kalabagan",
+				city: "Dhaka",
+				state: "Dhaka Division",
+				country: "Bangladesh",
+				zipCode: "1205",
+				propertyType: "Condo",
+				amenities: [
+					"WiFi",
+					"Air Conditioning",
+					"Lake View",
+					"Swimming Pool",
+					"Rooftop Garden",
+					"Elevator",
+					"24/7 Security",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
+						isPrimary: true,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1684338795288-097525d127f0",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
+						isPrimary: false,
+					},
+					{
+						url: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "B-201",
+						roomType: "Deluxe Suite",
+						capacity: 2,
+						rentAmount: 18000,
+						securityDeposit: 36000,
+						isAvailable: true,
+						description:
+							"Deluxe suite with expansive lake-facing glass windows and en-suite bath.",
+					},
+					{
+						roomNumber: "B-202",
+						roomType: "Single Room",
+						capacity: 1,
+						rentAmount: 11500,
+						securityDeposit: 23000,
+						isAvailable: true,
+						description:
+							"Bright single room with ergonomic workstation and garden view.",
+					},
+					{
+						roomNumber: "B-203",
+						roomType: "Studio Room",
+						capacity: 1,
+						rentAmount: 13500,
+						securityDeposit: 27000,
+						isAvailable: true,
+						description:
+							"Self-contained studio room with mini-pantry and soundproof walls.",
+					},
+				],
+			},
+			{
+				title: "Gulshan Skyline Penthouse",
+				description:
+					"Top-floor ultra-luxury penthouse featuring 360-degree city views, private elevator access, and rooftop terrace.",
+				address: "Road 71, Gulshan-2",
+				city: "Dhaka",
+				state: "Dhaka Division",
+				country: "Bangladesh",
+				zipCode: "1212",
+				propertyType: "Penthouse",
+				amenities: [
+					"WiFi",
+					"Private Elevator",
+					"Gym",
+					"Concierge",
+					"Jacuzzi",
+					"Generator",
+					"Parking",
+					"Smart Lock",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9",
+						isPrimary: true,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1661877737564-3dfd7282efcb",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
+						isPrimary: false,
+					},
+					{
+						url: "https://res.cloudinary.com/demo/image/upload/painting.jpg",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "PH-01",
+						roomType: "Presidential Suite",
+						capacity: 2,
+						rentAmount: 32000,
+						securityDeposit: 64000,
+						isAvailable: true,
+						description:
+							"Top-floor presidential suite with private rooftop terrace access and walk-in closet.",
+					},
+					{
+						roomNumber: "PH-02",
+						roomType: "Executive Room",
+						capacity: 2,
+						rentAmount: 24000,
+						securityDeposit: 48000,
+						isAvailable: true,
+						description:
+							"Executive room with skyline view, kingsize plush bed, and private lounge.",
+					},
+					{
+						roomNumber: "PH-03",
+						roomType: "Standard Room",
+						capacity: 1,
+						rentAmount: 16000,
+						securityDeposit: 32000,
+						isAvailable: true,
+						description:
+							"Quiet standard room with acoustic insulation and floor-to-ceiling windows.",
+					},
+					{
+						roomNumber: "PH-04",
+						roomType: "Guest Bedroom",
+						capacity: 1,
+						rentAmount: 14000,
+						securityDeposit: 28000,
+						isAvailable: true,
+						description:
+							"Chic guest bedroom with sleek modern finish and dedicated workspace.",
+					},
+				],
+			},
+			{
+				title: "Banani Gardenia Modern House",
+				description:
+					"Two-story contemporary house with a private landscaped front yard, peaceful surroundings, and gated perimeter.",
+				address: "House 28, Road 11, Block D, Banani",
+				city: "Dhaka",
+				state: "Dhaka Division",
+				country: "Bangladesh",
+				zipCode: "1213",
+				propertyType: "House",
+				amenities: [
+					"WiFi",
+					"Private Lawn",
+					"Car Parking",
+					"Generator",
+					"Air Conditioning",
+					"CCTV",
+					"Pet Friendly",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+						isPrimary: true,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
+						isPrimary: false,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1678297269980-16f4be3a15a6",
+						isPrimary: false,
+					},
+					{
+						url: "https://res.cloudinary.com/demo/image/upload/chair.jpg",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "G-101",
+						roomType: "Garden View Master",
+						capacity: 2,
+						rentAmount: 19000,
+						securityDeposit: 38000,
+						isAvailable: true,
+						description:
+							"Ground floor master bedroom opening directly to the landscaped lawn.",
+					},
+					{
+						roomNumber: "G-102",
+						roomType: "Studio Suite",
+						capacity: 1,
+						rentAmount: 14500,
+						securityDeposit: 29000,
+						isAvailable: true,
+						description:
+							"Peaceful studio room with reading nook and abundant natural daylight.",
+					},
+				],
+			},
+			{
+				title: "Uttara Rosewood Duplex Villa",
+				description:
+					"Exclusive duplex villa near Dhaka airport, offering serene suburban living with high-end designer fittings.",
+				address: "Sector 4, Road 7, Uttara",
+				city: "Dhaka",
+				state: "Dhaka Division",
+				country: "Bangladesh",
+				zipCode: "1230",
+				propertyType: "Villa",
+				amenities: [
+					"WiFi",
+					"Dedicated Garage",
+					"Solar Power",
+					"Central AC",
+					"24/7 Guard",
+					"Intercom",
+					"Balcony",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://plus.unsplash.com/premium_photo-1661883964999-c1bcb57a7357",
+						isPrimary: true,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1613490493576-7fde63acd811",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "V-1",
+						roomType: "Grand Master Room",
+						capacity: 2,
+						rentAmount: 22000,
+						securityDeposit: 44000,
+						isAvailable: true,
+						description:
+							"Expansive upstairs bedroom with walk-in wardrobe and private open balcony.",
+					},
+					{
+						roomNumber: "V-2",
+						roomType: "Double Bedroom",
+						capacity: 2,
+						rentAmount: 16500,
+						securityDeposit: 33000,
+						isAvailable: true,
+						description:
+							"Spacious double bedroom with polished hardwood flooring and natural sunlight.",
+					},
+					{
+						roomNumber: "V-3",
+						roomType: "Compact Single",
+						capacity: 1,
+						rentAmount: 11000,
+						securityDeposit: 22000,
+						isAvailable: true,
+						description:
+							"Cozy single bedroom ideal for university students or remote professionals.",
+					},
+				],
+			},
+			{
+				title: "Bashundhara Crystal Court",
+				description:
+					"Brand-new residential complex minutes away from university campuses, featuring fast fiber WiFi and fitness center.",
+				address: "Block C, Road 5, Bashundhara R/A",
+				city: "Dhaka",
+				state: "Dhaka Division",
+				country: "Bangladesh",
+				zipCode: "1229",
+				propertyType: "Apartment",
+				amenities: [
+					"WiFi",
+					"Fitness Center",
+					"Elevator",
+					"Standby Generator",
+					"CCTV",
+					"Fire Safety",
+					"Community Hall",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00",
+						isPrimary: true,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1682377521697-bc598b52b08a",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "C-301",
+						roomType: "Master Bedroom",
+						capacity: 2,
+						rentAmount: 15500,
+						securityDeposit: 31000,
+						isAvailable: true,
+						description:
+							"Master suite with attached bathroom and South-facing sunny balcony.",
+					},
+					{
+						roomNumber: "C-302",
+						roomType: "Single Room",
+						capacity: 1,
+						rentAmount: 9500,
+						securityDeposit: 19000,
+						isAvailable: true,
+						description:
+							"Single private room with study table, bookshelf, and high-speed LAN port.",
+					},
+					{
+						roomNumber: "C-303",
+						roomType: "Double Shared Room",
+						capacity: 2,
+						rentAmount: 12500,
+						securityDeposit: 25000,
+						isAvailable: true,
+						description:
+							"Roomy shared space with twin single beds and dual study desks.",
+					},
+					{
+						roomNumber: "C-304",
+						roomType: "Single Room",
+						capacity: 1,
+						rentAmount: 9000,
+						securityDeposit: 18000,
+						isAvailable: true,
+						description:
+							"Quiet inner room with custom storage wardrobe and overhead fan.",
+					},
+				],
+			},
+			{
+				title: "Agrabad Harborview Suites",
+				description:
+					"Coastal city condo near the bustling commercial district of Chittagong with sea-breeze balconies and modern security.",
+				address: "Commercial Area, Sheikh Mujib Road, Agrabad",
+				city: "Chittagong",
+				state: "Chittagong Division",
+				country: "Bangladesh",
+				zipCode: "4100",
+				propertyType: "Condo",
+				amenities: [
+					"WiFi",
+					"Elevator",
+					"Parking",
+					"Sea Breeze Balcony",
+					"Power Backup",
+					"Security Guard",
+					"Water Purifier",
+				],
+				isActive: true,
+				images: [
+					{
+						url: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd",
+						isPrimary: true,
+					},
+					{
+						url: "https://plus.unsplash.com/premium_photo-1661915661139-5b6a4e4a6fcc",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+						isPrimary: false,
+					},
+					{
+						url: "https://images.unsplash.com/photo-1560185007-cde436f6a4d0",
+						isPrimary: false,
+					},
+				],
+				rooms: [
+					{
+						roomNumber: "H-401",
+						roomType: "Harbor View Master",
+						capacity: 2,
+						rentAmount: 14000,
+						securityDeposit: 28000,
+						isAvailable: true,
+						description:
+							"Master room featuring sweeping port and city views with cool coastal breeze.",
+					},
+					{
+						roomNumber: "H-402",
+						roomType: "Deluxe Single Room",
+						capacity: 1,
+						rentAmount: 8500,
+						securityDeposit: 17000,
+						isAvailable: true,
+						description:
+							"Compact deluxe single room with modern furnishings and attached washroom.",
+					},
+				],
+			},
+		];
 
-		console.log("Tester Property Created : ", testerProperty);
-	} catch (error) {
-		console.log("Error Seeding Tester Owner : ", error);
-
-		if (config.tester_owner.email) {
-			await prisma.user.deleteMany({
+		for (const propData of propertiesSeedList) {
+			const existingProperty = await prisma.property.findFirst({
 				where: {
-					email: config.tester_owner.email,
+					ownerId: testerOwner.id,
+					title: propData.title,
+					deletedAt: null,
+				},
+				include: {
+					rooms: true,
+					images: true,
 				},
 			});
+
+			if (!existingProperty) {
+				const createdProperty = await prisma.property.create({
+					data: {
+						ownerId: testerOwner.id,
+						title: propData.title,
+						description: propData.description,
+						address: propData.address,
+						city: propData.city,
+						state: propData.state,
+						country: propData.country,
+						zipCode: propData.zipCode,
+						propertyType: propData.propertyType,
+						amenities: propData.amenities,
+						isActive: propData.isActive,
+						images: {
+							create: propData.images,
+						},
+						rooms: {
+							create: propData.rooms,
+						},
+					},
+				});
+				console.log("Tester Property Created : ", createdProperty.title);
+			} else {
+				console.log(
+					`Tester Property Already Exists : ${existingProperty.title}`,
+				);
+
+				// If existing property has fewer images than seed definition, enrich with new images
+				if (existingProperty.images.length < propData.images.length) {
+					const existingUrls = new Set(
+						existingProperty.images.map((img) => img.url),
+					);
+					const missingImages = propData.images.filter(
+						(img) => !existingUrls.has(img.url),
+					);
+
+					if (missingImages.length > 0) {
+						await prisma.propertyImage.createMany({
+							data: missingImages.map((img) => ({
+								propertyId: existingProperty.id,
+								url: img.url,
+								isPrimary: img.isPrimary,
+							})),
+						});
+						console.log(
+							`Enriched ${missingImages.length} additional images for ${existingProperty.title}`,
+						);
+					}
+				}
+
+				// If existing property is missing any rooms from the seed data, add them
+				const existingRoomNumbers = new Set(
+					existingProperty.rooms.map((r) => r.roomNumber),
+				);
+				const missingRooms = propData.rooms.filter(
+					(r) => !existingRoomNumbers.has(r.roomNumber),
+				);
+
+				for (const roomItem of missingRooms) {
+					await prisma.room.create({
+						data: {
+							...roomItem,
+							propertyId: existingProperty.id,
+						},
+					});
+					console.log(
+						`Added missing room ${roomItem.roomNumber} to ${existingProperty.title}`,
+					);
+				}
+			}
 		}
+	} catch (error) {
+		console.log("Error Seeding Tester Owner Properties : ", error);
 	}
 };
 

@@ -1,0 +1,251 @@
+{
+  "info": {
+    "_postman_id": "b7a6-housing-roommate-api",
+    "name": "Housing & Roommate Management Platform API",
+    "description": "Current API collection for the Housing & Roommate Management Platform backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "propertyId", "value": "" },
+    { "key": "roomId", "value": "" },
+    { "key": "applicationId", "value": "" },
+    { "key": "viewingRequestId", "value": "" },
+    { "key": "maintenanceRequestId", "value": "" },
+    { "key": "paymentId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/" }
+        },
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/health" }
+        },
+        {
+          "name": "Cron Job",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/cron" }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Tenant User\",\n  \"email\": \"tenant@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"+8801700000000\",\n  \"role\": \"TENANT\"\n}" },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["const json = pm.response.json();", "if (json.data?.accessToken) pm.collectionVariables.set('accessToken', json.data.accessToken);", "if (json.data?.refreshToken) pm.collectionVariables.set('refreshToken', json.data.refreshToken);"] }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"tenant@example.com\",\n  \"password\": \"password123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Google Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"idToken\": \"GOOGLE_ID_TOKEN\",\n  \"role\": \"TENANT\"\n}" },
+            "url": "{{baseUrl}}/api/auth/google"
+          }
+        },
+        {
+          "name": "Google Login Alias",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"idToken\": \"GOOGLE_ID_TOKEN\"\n}" },
+            "url": "{{baseUrl}}/api/auth/google-login"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": "{{baseUrl}}/api/auth/refresh-token"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "POST", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/auth/logout" }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Own Profile",
+          "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/users/me" }
+        },
+        {
+          "name": "Update Own Profile",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"phone\": \"+8801700000000\"\n}" }, "url": "{{baseUrl}}/api/users/me" }
+        },
+        {
+          "name": "Get User By ID",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/users/{{userId}}" }
+        },
+        {
+          "name": "Change User Role",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"role\": \"OWNER\"\n}" }, "url": "{{baseUrl}}/api/users/{{userId}}/role" }
+        }
+      ]
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "Create Property",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"title\": \"Modern Apartment\",\n  \"description\": \"Two bedroom apartment\",\n  \"address\": \"12 Main Road\",\n  \"city\": \"Dhaka\",\n  \"state\": \"Dhaka\",\n  \"country\": \"Bangladesh\",\n  \"zipCode\": \"1207\",\n  \"propertyType\": \"Apartment\",\n  \"amenities\": [\"WiFi\", \"Parking\"]\n}" }, "url": "{{baseUrl}}/api/properties" }
+        },
+        {
+          "name": "List Properties",
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/api/properties?page=1&limit=10&city=Dhaka&propertyType=Apartment&sortBy=createdAt&sortOrder=desc", "host": ["{{baseUrl}}"], "path": ["api", "properties"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }, { "key": "city", "value": "Dhaka" }, { "key": "propertyType", "value": "Apartment" }, { "key": "sortBy", "value": "createdAt" }, { "key": "sortOrder", "value": "desc" }] } }
+        },
+        {
+          "name": "Search Properties",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/properties/search?search=apartment" }
+        },
+        {
+          "name": "Get Property",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/properties/{{propertyId}}" }
+        },
+        {
+          "name": "Update Property",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"title\": \"Updated Apartment\",\n  \"isActive\": true\n}" }, "url": "{{baseUrl}}/api/properties/{{propertyId}}" }
+        },
+        {
+          "name": "Delete Property",
+          "request": { "method": "DELETE", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/properties/{{propertyId}}" }
+        },
+        {
+          "name": "Create Viewing Request For Property",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"scheduledAt\": \"2026-10-15T10:00:00.000Z\",\n  \"notes\": \"Please call before arrival\"\n}" }, "url": "{{baseUrl}}/api/properties/{{propertyId}}/viewing-requests" }
+        },
+        {
+          "name": "Create Room For Property",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"roomNumber\": \"A-101\",\n  \"roomType\": \"Single\",\n  \"capacity\": 1,\n  \"rentAmount\": 25000,\n  \"securityDeposit\": 50000,\n  \"availableFrom\": \"2026-11-01T00:00:00.000Z\",\n  \"description\": \"Furnished room\"\n}" }, "url": "{{baseUrl}}/api/properties/{{propertyId}}/rooms" }
+        },
+        {
+          "name": "List Rooms For Property",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/properties/{{propertyId}}/rooms" }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        { "name": "Get Room", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rooms/{{roomId}}" } },
+        {
+          "name": "Create Maintenance Request",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"title\": \"Leaking tap\",\n  \"description\": \"The kitchen tap is leaking.\",\n  \"priority\": \"MEDIUM\"\n}" }, "url": "{{baseUrl}}/api/rooms/{{roomId}}/maintenance" }
+        },
+        {
+          "name": "Assign Tenant To Room",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"tenantId\": \"{{userId}}\",\n  \"applicationId\": \"{{applicationId}}\"\n}" }, "url": "{{baseUrl}}/api/rooms/{{roomId}}/assign" }
+        },
+        {
+          "name": "Update Room Availability",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"isAvailable\": true,\n  \"availableFrom\": \"2026-11-01T00:00:00.000Z\",\n  \"availableTo\": null\n}" }, "url": "{{baseUrl}}/api/rooms/{{roomId}}/availability" }
+        },
+        {
+          "name": "Update Room",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"rentAmount\": 27000,\n  \"description\": \"Updated room description\"\n}" }, "url": "{{baseUrl}}/api/rooms/{{roomId}}" }
+        },
+        { "name": "Delete Room", "request": { "method": "DELETE", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/rooms/{{roomId}}" } }
+      ]
+    },
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "Create Application",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"roomId\": \"{{roomId}}\",\n  \"moveInDate\": \"2026-11-01T00:00:00.000Z\",\n  \"moveOutDate\": \"2027-10-31T00:00:00.000Z\",\n  \"message\": \"I would like to rent this room.\"\n}" }, "url": "{{baseUrl}}/api/applications" }
+        },
+        {
+          "name": "List Applications",
+          "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/applications?page=1&limit=10&status=PENDING&sortBy=createdAt&sortOrder=desc" }
+        },
+        { "name": "My Applications", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/applications/my" } },
+        { "name": "Applications For Property", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/applications/for-property/{{propertyId}}" } },
+        { "name": "Get Application", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/applications/{{applicationId}}" } },
+        {
+          "name": "Update Application Status",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"status\": \"APPROVED\"\n}" }, "url": "{{baseUrl}}/api/applications/{{applicationId}}/status" }
+        }
+      ]
+    },
+    {
+      "name": "Viewing Requests",
+      "item": [
+        { "name": "List Viewing Requests", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/viewing-requests" } },
+        {
+          "name": "Update Viewing Status",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"status\": \"CONFIRMED\"\n}" }, "url": "{{baseUrl}}/api/viewing-requests/{{viewingRequestId}}/status" }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "item": [
+        { "name": "List Maintenance Requests", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/maintenance-requests" } },
+        {
+          "name": "Update Maintenance Status",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"assignedTo\": \"{{userId}}\"\n}" }, "url": "{{baseUrl}}/api/maintenance-requests/{{maintenanceRequestId}}/status" }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Initiate Payment (Tenant)",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"applicationId\": \"{{applicationId}}\",\n  \"amount\": 25000,\n  \"paymentType\": \"RENT\",\n  \"description\": \"November rent\",\n  \"successUrl\": \"http://localhost:3000/payment/success\",\n  \"cancelUrl\": \"http://localhost:3000/payment/cancel\"\n}" }, "url": "{{baseUrl}}/api/payments/initiate" }
+        },
+        { "name": "Owner Earnings", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/payments/earnings" } },
+        { "name": "My Payments", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/payments/my?page=1&limit=10&status=COMPLETED&paymentType=RENT&sortBy=createdAt&sortOrder=desc" } },
+        { "name": "Get Payment", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/payments/{{paymentId}}" } },
+        {
+          "name": "Stripe Webhook",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "stripe-signature", "value": "STRIPE_SIGNATURE" }], "body": { "mode": "raw", "raw": "{\n  \"type\": \"checkout.session.completed\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"cs_test_example\",\n      \"metadata\": {\n        \"paymentId\": \"{{paymentId}}\"\n      }\n    }\n  }\n}" }, "url": "{{baseUrl}}/api/payments/webhook" }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        { "name": "List Users", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/admin/users?page=1&limit=10&search=tenant&role=TENANT" } },
+        {
+          "name": "Update User Role",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "body": { "mode": "raw", "raw": "{\n  \"role\": \"OWNER\"\n}" }, "url": "{{baseUrl}}/api/admin/users/{{userId}}/role" }
+        },
+        { "name": "Dashboard Stats", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/admin/dashboard-stats" } },
+        { "name": "List Properties (Admin)", "request": { "method": "GET", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/admin/properties?page=1&limit=10" } },
+        { "name": "Hard Delete Property", "request": { "method": "DELETE", "header": [], "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] }, "url": "{{baseUrl}}/api/admin/properties/{{propertyId}}" } }
+      ]
+    }
+  ]
+}
